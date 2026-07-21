@@ -410,7 +410,7 @@ http://localhost:5173
 
 # 👨‍💻 Developed By
 
-**Nivas Bidave**
+**Sudhir Kadam**
 
 ### Technologies
 
@@ -425,6 +425,4 @@ http://localhost:5173
 
 ---
 
-# 📄 License
 
-This project was developed for a **Technical Evaluation Assignment**. It is intended for educational and demonstration purposes only.
