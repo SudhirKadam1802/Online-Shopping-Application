@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { addToWishlist, getProducts, getWishlist, removeFromWishlist } from './api';
 import ProductCard from './ProductCard';
 
-const ProductList = ({ onAddToCart, refreshToken = 0 }) => {
+const ProductList = ({ onAddToCart, isCartReady = true, refreshToken = 0 }) => {
   const [products, setProducts] = useState([]);
   const [wishlistIds, setWishlistIds] = useState([]);
   const [search, setSearch] = useState('');
@@ -104,6 +104,7 @@ const ProductList = ({ onAddToCart, refreshToken = 0 }) => {
               key={product.id}
               product={product}
               onAddToCart={onAddToCart}
+              isCartReady={isCartReady}
               isWishlisted={wishlistIds.includes(product.id)}
               onToggleWishlist={toggleWishlist}
             />

@@ -8,6 +8,9 @@ import PurchaseSummary from "./PurchaseSummary";
 const Home = ({
   cartId,
   cartCount,
+  cartLoading,
+  cartError,
+  onRetryCart,
   onCartChanged,
 }) => {
   const [summary, setSummary] = useState(null);
@@ -92,6 +95,7 @@ const Home = ({
 
           <ProductList
             onAddToCart={handleAddToCart}
+            isCartReady={Boolean(cartId)}
             refreshToken={productRefreshToken}
           />
 
@@ -99,6 +103,20 @@ const Home = ({
 
         {/* Right Section */}
         <div className="space-y-6">
+
+          {cartLoading && (
+            <p role="status" className="rounded-xl border border-violet-200 bg-violet-50 p-4 text-sm text-violet-800">
+              Preparing your cart...
+            </p>
+          )}
+          {cartError && (
+            <div role="alert" className="rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-700">
+              <p>{cartError}</p>
+              <button type="button" onClick={onRetryCart} className="mt-2 font-semibold underline underline-offset-2">
+                Try again
+              </button>
+            </div>
+          )}
 
           {JSON.parse(localStorage.getItem("user") || "{}").isAdmin && (
             <AddProduct onProductAdded={() => setProductRefreshToken((value) => value + 1)} />

@@ -18,6 +18,9 @@ import ProtectedRoute from "./components/ProtectedRoute";
 function App() {
   const [cartId, setCartId] = useState(null);
   const [cartCount, setCartCount] = useState(0);
+  const [cartLoading, setCartLoading] = useState(false);
+  const [cartError, setCartError] = useState('');
+  const [cartRetryCount, setCartRetryCount] = useState(0);
   const [user, setUser] = useState(() => {
     try {
       return JSON.parse(localStorage.getItem("user") || "null");
@@ -44,41 +47,66 @@ function App() {
     };
   }, []);
 
-  const refreshCartCount = (id = cartId) => {
+  const refreshCartCount = async (id = cartId) => {
     if (!id) {
       setCartCount(0);
       return;
     }
 
-    getCart(id)
-      .then((response) => {
-        const count = response.data.cartItems?.reduce((total, item) => total + item.quantity, 0) || 0;
-        setCartCount(count);
-      })
-      .catch((error) => console.error("Error refreshing cart:", error));
+    try {
+      const response = await getCart(id);
+      const count = response.data.cartItems?.reduce((total, item) => total + item.quantity, 0) || 0;
+      setCartCount(count);
+    } catch (error) {
+      console.error("Error refreshing cart:", error);
+    }
   };
 
   useEffect(() => {
     const token = localStorage.getItem("token");
 
-    if (!token) return;
+    setCartId(null);
+    setCartCount(0);
+    setCartError('');
 
+    if (!user?.id || !token) {
+      setCartLoading(false);
+      return undefined;
+    }
+
+    let active = true;
+    setCartLoading(true);
     const initializeCart = async () => {
-      if (cartId) return;
-
       try {
         const response = await createCart();
         const id = response.data.id || response.data.cartId;
-        setCartId(id);
+        if (!id) {
+          throw new Error("The cart API did not return a cart ID.");
+        }
         const cartResponse = await getCart(id);
-        setCartCount(cartResponse.data.cartItems?.reduce((total, item) => total + item.quantity, 0) || 0);
+        if (active) {
+          setCartId(id);
+          setCartCount(cartResponse.data.cartItems?.reduce((total, item) => total + item.quantity, 0) || 0);
+        }
       } catch (error) {
         console.error("Error creating cart:", error);
+        if (active) {
+          setCartError("Unable to prepare your cart. Please try again.");
+        }
+      } finally {
+        if (active) setCartLoading(false);
       }
     };
 
     initializeCart();
-  }, [cartId]);
+    return () => {
+      active = false;
+    };
+  }, [user?.id, cartRetryCount]);
+
+  const retryCartInitialization = () => {
+    setCartRetryCount((count) => count + 1);
+  };
 
   return (
     <Router>
@@ -98,6 +126,9 @@ function App() {
                   <Home
                     cartId={cartId}
                     cartCount={cartCount}
+                    cartLoading={cartLoading}
+                    cartError={cartError}
+                    onRetryCart={retryCartInitialization}
                     onCartChanged={refreshCartCount}
                   />
                 </ProtectedRoute>
