@@ -144,7 +144,8 @@ namespace OnlineShoppingApplication.Tests.Controllers
                 .Setup(x => x.CreateToken(
                     It.IsAny<string>(),
                     It.IsAny<string>(),
-                    It.IsAny<string>()))
+                    It.IsAny<string>(),
+                    It.IsAny<bool>()))
                 .Returns("FakeJwtToken");
 
             var controller = new AuthController(
@@ -187,7 +188,8 @@ namespace OnlineShoppingApplication.Tests.Controllers
                 x.CreateToken(
                     It.IsAny<string>(),
                     It.IsAny<string>(),
-                    It.IsAny<string>()),
+                    It.IsAny<string>(),
+                    It.IsAny<bool>()),
                 Times.Once);
         }
 
@@ -246,7 +248,8 @@ namespace OnlineShoppingApplication.Tests.Controllers
                 x => x.CreateToken(
                     It.IsAny<string>(),
                     It.IsAny<string>(),
-                    It.IsAny<string>()),
+                    It.IsAny<string>(),
+                    It.IsAny<bool>()),
                 Times.Never);
         }
 

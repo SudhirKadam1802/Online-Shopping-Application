@@ -162,6 +162,39 @@ namespace OnlineShoppingApplication.Tests.Controllers
             Assert.Equal(product.Name, returnedProduct.Name);
         }
 
+        [Fact]
+        public async Task UpdateProduct_ValidProduct_UpdatesExistingRecord()
+        {
+            var context = GetDbContext();
+            var product = new Product
+            {
+                Name = "Old name",
+                Description = "Old description",
+                Category = "Old category",
+                Price = 10,
+                StockQuantity = 2
+            };
+            context.Products.Add(product);
+            await context.SaveChangesAsync();
+
+            var result = await new ProductsController(context).UpdateProduct(product.Id, new Product
+            {
+                Name = "New name",
+                Description = "New description",
+                Category = "New category",
+                Price = 25,
+                Discount = 15,
+                StockQuantity = 8
+            });
+
+            var updated = Assert.IsType<Product>(Assert.IsType<OkObjectResult>(result.Result).Value);
+            Assert.Equal("New name", updated.Name);
+            Assert.Equal("New category", updated.Category);
+            Assert.Equal(25, updated.Price);
+            Assert.Equal(15, updated.Discount);
+            Assert.Equal(8, updated.StockQuantity);
+        }
+
 
         [Fact]
         public async Task DeleteProduct_ExistingId_ReturnsOk()
@@ -194,6 +227,37 @@ namespace OnlineShoppingApplication.Tests.Controllers
 
             // Verify product is deleted from database
             Assert.Empty(context.Products);
+        }
+
+        [Fact]
+        public async Task DeleteProduct_InCustomerCart_ReturnsConflict()
+        {
+            var context = GetDbContext();
+            var product = new Product
+            {
+                Name = "Cart product",
+                Description = "Product currently in a cart",
+                Category = "Test",
+                Price = 20,
+                StockQuantity = 2
+            };
+            context.Products.Add(product);
+            var cart = new Cart { UserId = 1 };
+            context.Carts.Add(cart);
+            context.CartItems.Add(new CartItem
+            {
+                Cart = cart,
+                Product = product,
+                ProductId = product!.Id,
+                Quantity = 1,
+                Price = product.Price
+            });
+            await context.SaveChangesAsync();
+
+            var result = await new ProductsController(context).DeleteProduct(product.Id);
+
+            Assert.IsType<ConflictObjectResult>(result);
+            Assert.NotNull(await context.Products.FindAsync(product.Id));
         }
 
     }

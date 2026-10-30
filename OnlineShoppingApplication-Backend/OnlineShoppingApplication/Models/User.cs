@@ -10,5 +10,7 @@
 
         // Store hashed password instead of plain password
         public string PasswordHash { get; set; } = string.Empty;
+
+        public bool IsAdmin { get; set; }
     }
 }

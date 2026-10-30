@@ -1,40 +1,17 @@
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import { addCartItem, createCart, getCartSummary } from "./api";
+import { addCartItem, getCartSummary } from "./api";
 import AddProduct from "./AddProduct";
 import ProductList from "./ProductList";
 import PurchaseSummary from "./PurchaseSummary";
 
 const Home = ({
   cartId,
-  setCartId,
   cartCount,
-  setCartCount,
   onCartChanged,
 }) => {
   const [summary, setSummary] = useState(null);
-
-  // Create Cart
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (!token) return;
-
-    const initializeCart = async () => {
-      try {
-        const response = await createCart();
-        const newCartId = response.data.id || response.data.cartId;
-
-        setCartId(newCartId);
-        onCartChanged();
-      } catch (err) {
-        console.error(err);
-      }
-    };
-
-    if (!cartId) {
-      initializeCart();
-    }
-  }, [cartId, onCartChanged, setCartId]);
+  const [productRefreshToken, setProductRefreshToken] = useState(0);
 
   // Load Purchase Summary
   useEffect(() => {
@@ -62,11 +39,8 @@ const Home = ({
     try {
       await addCartItem(cartId, product.id, 1);
 
-      // Update Cart Count
-      setCartCount((count) => count + 1);
-
       // Refresh Cart
-      onCartChanged();
+      await onCartChanged(cartId);
 
       // Reload Purchase Summary
       const response = await getCartSummary(cartId);
@@ -116,16 +90,19 @@ const Home = ({
             </p>
           </div>
 
-          <ProductList onAddToCart={handleAddToCart} />
+          <ProductList
+            onAddToCart={handleAddToCart}
+            refreshToken={productRefreshToken}
+          />
 
         </div>
 
         {/* Right Section */}
         <div className="space-y-6">
 
-          <AddProduct
-            onProductAdded={() => window.location.reload()}
-          />
+          {JSON.parse(localStorage.getItem("user") || "{}").isAdmin && (
+            <AddProduct onProductAdded={() => setProductRefreshToken((value) => value + 1)} />
+          )}
 
           <PurchaseSummary summary={summary} />
 

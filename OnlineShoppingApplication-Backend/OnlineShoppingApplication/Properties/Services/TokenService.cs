@@ -14,7 +14,7 @@ namespace OnlineShoppingApplication.Services
             _configuration = configuration;
         }
 
-        public string CreateToken(string userId, string name, string email)
+        public string CreateToken(string userId, string name, string email, bool isAdmin)
         {
             // Read expiry time from appsettings.json
             var expiry = Convert.ToDouble(_configuration["Jwt:ExpiryInMinutes"]);
@@ -27,13 +27,18 @@ namespace OnlineShoppingApplication.Services
             Console.WriteLine("==================================");
 
             // Create JWT Claims
-            var claims = new[]
+            var claims = new List<Claim>
             {
                 new Claim(JwtRegisteredClaimNames.Sub, userId),
                 new Claim(JwtRegisteredClaimNames.Name, name),
                 new Claim(JwtRegisteredClaimNames.Email, email),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
             };
+
+            if (isAdmin)
+            {
+                claims.Add(new Claim(ClaimTypes.Role, "Admin"));
+            }
 
             // Secret Key
             var key = new SymmetricSecurityKey(

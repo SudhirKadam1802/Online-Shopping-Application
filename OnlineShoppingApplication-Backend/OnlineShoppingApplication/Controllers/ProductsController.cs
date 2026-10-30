@@ -44,10 +44,17 @@ namespace OnlineShoppingApplication.Controllers
         /// Add a new product.
         /// </summary>
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult<Product>> CreateProduct(Product product)
         {
+            var validationError = ValidateProduct(product);
+            if (validationError is not null) return BadRequest(new { message = validationError });
+
             try
             {
+                product.Name = product.Name.Trim();
+                product.Description = product.Description.Trim();
+                product.Category = product.Category.Trim();
                 _context.Products.Add(product);
                 await _context.SaveChangesAsync();
 
@@ -61,6 +68,27 @@ namespace OnlineShoppingApplication.Controllers
                     error = ex.Message
                 });
             }
+        }
+
+        [HttpPut("{id:int}")]
+        [Authorize(Roles = "Admin")]
+        public async Task<ActionResult<Product>> UpdateProduct(int id, Product updatedProduct)
+        {
+            var validationError = ValidateProduct(updatedProduct);
+            if (validationError is not null) return BadRequest(new { message = validationError });
+
+            var product = await _context.Products.FindAsync(id);
+            if (product is null) return NotFound(new { message = $"Product with ID {id} not found" });
+
+            product.Name = updatedProduct.Name.Trim();
+            product.Description = updatedProduct.Description.Trim();
+            product.Category = updatedProduct.Category.Trim();
+            product.Price = updatedProduct.Price;
+            product.Discount = updatedProduct.Discount;
+            product.StockQuantity = updatedProduct.StockQuantity;
+
+            await _context.SaveChangesAsync();
+            return Ok(product);
         }
 
 
@@ -93,6 +121,7 @@ namespace OnlineShoppingApplication.Controllers
         /// Delete a product.
         /// </summary>
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteProduct(int id)
         {
             try
@@ -104,6 +133,14 @@ namespace OnlineShoppingApplication.Controllers
                     return NotFound(new
                     {
                         message = $"Product with ID {id} not found"
+                    });
+                }
+
+                if (await _context.CartItems.AnyAsync(item => item.ProductId == id))
+                {
+                    return Conflict(new
+                    {
+                        message = "This product is in a customer's cart and cannot be deleted yet."
                     });
                 }
 
@@ -125,5 +162,22 @@ namespace OnlineShoppingApplication.Controllers
             }
         }
 
+        private static string? ValidateProduct(Product product)
+        {
+            if (string.IsNullOrWhiteSpace(product.Name) || product.Name.Length > 200)
+                return "Product name is required and must be at most 200 characters.";
+            if (product.Description.Length > 1000)
+                return "Product description must be at most 1000 characters.";
+            if (string.IsNullOrWhiteSpace(product.Category))
+                return "Product category is required.";
+            if (product.Price <= 0)
+                return "Product price must be greater than zero.";
+            if (product.StockQuantity < 0)
+                return "Stock quantity cannot be negative.";
+            if (product.Discount is < 0 or > 100)
+                return "Discount must be between 0 and 100.";
+
+            return null;
+        }
     }
 }

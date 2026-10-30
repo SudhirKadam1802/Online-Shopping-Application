@@ -66,6 +66,42 @@ Console.WriteLine("JWT Expiry = " + builder.Configuration["Jwt:ExpiryInMinutes"]
 Console.WriteLine("Environment = " + builder.Environment.EnvironmentName);
 var app = builder.Build();
 
+if (args.Any(argument => argument.Equals("--promote-admin", StringComparison.OrdinalIgnoreCase)))
+{
+    if (args.Length != 2 || !args[0].Equals("--promote-admin", StringComparison.OrdinalIgnoreCase))
+    {
+        Console.Error.WriteLine("Usage: --promote-admin <registered-email>");
+        Environment.ExitCode = 1;
+        return;
+    }
+
+    var email = args[1].Trim();
+    if (string.IsNullOrWhiteSpace(email))
+    {
+        Console.Error.WriteLine("Usage: --promote-admin <registered-email>");
+        Environment.ExitCode = 1;
+        return;
+    }
+
+    await using var scope = app.Services.CreateAsyncScope();
+    var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+    var normalizedEmail = email.ToUpperInvariant();
+    var user = await dbContext.Users.FirstOrDefaultAsync(
+        candidate => candidate.Email.ToUpper() == normalizedEmail);
+
+    if (user is null)
+    {
+        Console.Error.WriteLine($"No registered user was found with email '{email}'.");
+        Environment.ExitCode = 1;
+        return;
+    }
+
+    user.IsAdmin = true;
+    await dbContext.SaveChangesAsync();
+    Console.WriteLine($"Admin access granted to '{user.Email}'. Sign in again to refresh the JWT.");
+    return;
+}
+
 // Configure HTTP Request Pipeline
 if (app.Environment.IsDevelopment())
 {

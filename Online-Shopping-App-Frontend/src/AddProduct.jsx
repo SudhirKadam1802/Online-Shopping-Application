@@ -2,7 +2,14 @@ import { useState } from 'react';
 import { createProduct } from './api';
 
 const AddProduct = ({ onProductAdded }) => {
-  const [form, setForm] = useState({ name: '', description: '', price: '', stockQuantity: '' });
+  const [form, setForm] = useState({
+    name: '',
+    description: '',
+    category: '',
+    price: '',
+    discount: '0',
+    stockQuantity: '',
+  });
   const [message, setMessage] = useState('');
 
   const handleSubmit = async (e) => {
@@ -11,12 +18,14 @@ const AddProduct = ({ onProductAdded }) => {
       const payload = {
         name: form.name,
         description: form.description,
+        category: form.category,
         price: Number(form.price),
+        discount: Number(form.discount),
         stockQuantity: Number(form.stockQuantity),
       };
       await createProduct(payload);
       setMessage('Product added successfully.');
-      setForm({ name: '', description: '', price: '', stockQuantity: '' });
+      setForm({ name: '', description: '', category: '', price: '', discount: '0', stockQuantity: '' });
       onProductAdded();
     } catch (err) {
       setMessage('Unable to add product.');
@@ -41,11 +50,19 @@ const AddProduct = ({ onProductAdded }) => {
           onChange={(e) => setForm({ ...form, description: e.target.value })}
           required
         />
+        <input
+          className="w-full rounded-lg border border-slate-700 bg-slate-800 px-4 py-2 text-sm outline-none"
+          placeholder="Category"
+          value={form.category}
+          onChange={(e) => setForm({ ...form, category: e.target.value })}
+          required
+        />
         <div className="grid gap-4 md:grid-cols-2">
           <input
             className="w-full rounded-lg border border-slate-700 bg-slate-800 px-4 py-2 text-sm outline-none"
             placeholder="Price"
             type="number"
+            min="0.01"
             value={form.price}
             onChange={(e) => setForm({ ...form, price: e.target.value })}
             required
@@ -54,9 +71,19 @@ const AddProduct = ({ onProductAdded }) => {
             className="w-full rounded-lg border border-slate-700 bg-slate-800 px-4 py-2 text-sm outline-none"
             placeholder="Stock"
             type="number"
+            min="0"
             value={form.stockQuantity}
             onChange={(e) => setForm({ ...form, stockQuantity: e.target.value })}
             required
+          />
+          <input
+            className="w-full rounded-lg border border-slate-700 bg-slate-800 px-4 py-2 text-sm outline-none"
+            placeholder="Discount (%)"
+            type="number"
+            min="0"
+            max="100"
+            value={form.discount}
+            onChange={(e) => setForm({ ...form, discount: e.target.value })}
           />
         </div>
         <button className="rounded-lg bg-cyan-500 px-4 py-2 font-semibold text-white hover:bg-cyan-600">

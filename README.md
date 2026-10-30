@@ -233,10 +233,8 @@ User Logout
 
 Business Rule:
 
-- If Cart Total is greater than ₹5000
-  - Apply 10% Discount
-- Otherwise
-  - No Discount
+- If the cart subtotal is at least ₹5000, apply the highest discount percentage among its products.
+- Otherwise, no cart-level discount is applied.
 
 The discount is calculated automatically whenever products are added to the shopping cart.
 
@@ -410,7 +408,7 @@ http://localhost:5173
 
 # 👨‍💻 Developed By
 
-**Nivas Bidave**
+**Sudhir Kadam**
 
 ### Technologies
 
@@ -423,8 +421,45 @@ http://localhost:5173
 - Axios
 - React Router DOM
 
+## Recent feature additions
+
+- Search products by name/description and filter by category and price.
+- Add and remove products from a per-user wishlist.
+- Place a demo order from the cart (no payment is collected); stock is checked and deducted, and orders are saved for the user's order history.
+- Product creation and deletion are restricted to users with the admin role.
+- The admin dashboard provides store totals, product editing, order status updates, and user role management.
+
+### Database update and admin setup
+
+Apply the new migration before starting the API:
+
+```bash
+dotnet ef database update --project OnlineShoppingApplication-Backend/OnlineShoppingApplication/OnlineShoppingApplication.csproj
+```
+
+Newly registered accounts are regular users. To grant admin access to an existing account, run this command from the repository root after applying the migration:
+
+```powershell
+dotnet run --project OnlineShoppingApplication-Backend\OnlineShoppingApplication\OnlineShoppingApplication.csproj -- --promote-admin admin@example.com
+```
+
+This only promotes an already-registered email; it cannot create accounts or change passwords. The user must log in again to receive an admin token. Keep the admin account email under your control.
+
+### New API endpoints
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/api/Wishlist` | Get the signed-in user's wishlist |
+| POST | `/api/Wishlist/{productId}` | Add a product to the wishlist |
+| DELETE | `/api/Wishlist/{productId}` | Remove a product from the wishlist |
+| POST | `/api/Orders/checkout/{cartId}` | Place an order and deduct stock |
+| GET | `/api/Orders` | Get the signed-in user's order history |
+| GET | `/api/Admin/dashboard` | Store totals and sales summary (admin only) |
+| GET | `/api/Admin/orders` | List all orders (admin only) |
+| PUT | `/api/Admin/orders/{orderId}/status` | Advance or cancel an order (admin only) |
+| GET | `/api/Admin/users` | List users without password data (admin only) |
+| PUT | `/api/Admin/users/{userId}/role` | Grant or revoke admin access (admin only) |
+
+`POST /api/Products`, `PUT /api/Products/{id}`, and `DELETE /api/Products/{id}` require the Admin role.
+
 ---
-
-# 📄 License
-
-This project was developed for a **Technical Evaluation Assignment**. It is intended for educational and demonstration purposes only.

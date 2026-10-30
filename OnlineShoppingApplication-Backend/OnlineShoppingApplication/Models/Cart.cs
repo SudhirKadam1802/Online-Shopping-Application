@@ -7,6 +7,8 @@ namespace OnlineShoppingApplication.Models
     {
         public int Id { get; set; }
 
+        public int? UserId { get; set; }
+
         public string SessionId { get; set; } = Guid.NewGuid().ToString();
 
         public ICollection<CartItem> CartItems { get; set; } = new List<CartItem>();

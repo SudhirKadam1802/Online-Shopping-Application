@@ -1,6 +1,8 @@
 {
   "profiles": {
     "http": {
+      "launchBrowser": true,
+      "launchUrl": "swagger",
       "commandName": "Project",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
@@ -9,6 +11,9 @@
       "applicationUrl": "http://localhost:5031"
     },
     "https": {
+      "launchBrowser": true,
+      "launchUrl": "swagger",
+      "hotReloadEnabled": false,
       "commandName": "Project",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"

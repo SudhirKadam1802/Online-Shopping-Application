@@ -95,7 +95,8 @@ namespace OnlineShoppingApplication.Controllers
             var token = _tokenService.CreateToken(
                 user.Id.ToString(),
                 user.Name,
-                user.Email);
+                user.Email,
+                user.IsAdmin);
 
             return Ok(new
             {
@@ -105,7 +106,8 @@ namespace OnlineShoppingApplication.Controllers
                 {
                     user.Id,
                     user.Name,
-                    user.Email
+                    user.Email,
+                    user.IsAdmin
                 }
             });
         }

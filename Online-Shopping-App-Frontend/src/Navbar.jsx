@@ -19,9 +19,11 @@ const Navbar = ({ cartCount }) => {
 
     // Update navbar whenever localStorage changes
     window.addEventListener("storage", loadUser);
+    window.addEventListener("auth-changed", loadUser);
 
     return () => {
       window.removeEventListener("storage", loadUser);
+      window.removeEventListener("auth-changed", loadUser);
     };
   }, []);
 
@@ -54,16 +56,43 @@ const Navbar = ({ cartCount }) => {
             Home
           </Link>
 
-          <Link
-            to="/cart"
-            className="flex items-center gap-2 rounded-full bg-white/20 px-5 py-2.5 font-semibold text-white backdrop-blur-md transition-all duration-300 hover:scale-105 hover:bg-white/30"
-          >
-            🛒 Cart
+          {!user?.isAdmin && (
+            <Link
+              to="/cart"
+              className="flex items-center gap-2 rounded-full bg-white/20 px-5 py-2.5 font-semibold text-white backdrop-blur-md transition-all duration-300 hover:scale-105 hover:bg-white/30"
+            >
+              🛒 Cart
 
-            <span className="flex h-7 w-7 items-center justify-center rounded-full bg-white text-sm font-bold text-purple-600">
-              {cartCount}
-            </span>
-          </Link>
+              <span className="flex h-7 w-7 items-center justify-center rounded-full bg-white text-sm font-bold text-purple-600">
+                {cartCount}
+              </span>
+            </Link>
+          )}
+
+          {user && (
+            <>
+              {user.isAdmin && (
+                <Link
+                  to="/admin"
+                  className="rounded-lg px-3 py-2 font-semibold text-white transition hover:bg-white/10"
+                >
+                  Admin
+                </Link>
+              )}
+              <Link
+                to="/wishlist"
+                className="rounded-lg px-3 py-2 text-white transition hover:bg-white/10"
+              >
+                Wishlist
+              </Link>
+              <Link
+                to="/orders"
+                className="rounded-lg px-3 py-2 text-white transition hover:bg-white/10"
+              >
+                Orders
+              </Link>
+            </>
+          )}
 
           {!user ? (
             <>

@@ -1,9 +1,12 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { loginUser } from "../api";
 
 const Login = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
+
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -35,10 +38,12 @@ const Login = () => {
         "user",
         JSON.stringify(response.data.user)
       );
+      window.dispatchEvent(new Event("auth-changed"));
 
-      alert("Login Successful!");
-
-      window.location.href = "/";
+      const returnTo = location.state?.from?.pathname;
+      navigate(response.data.user.isAdmin ? "/admin" : returnTo || "/", {
+        replace: true,
+      });
     } catch (err) {
       setError(
         err.response?.data?.message ||

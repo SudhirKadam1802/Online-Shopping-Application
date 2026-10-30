@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using OnlineShoppingApplication.Data;
 using OnlineShoppingApplication.Models;
 using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
 namespace OnlineShoppingApplication.Controllers
 {
     /// <summary>
@@ -23,16 +24,29 @@ namespace OnlineShoppingApplication.Controllers
             _context = context;
         }
 
-        /// Create a new cart.
+        /// Return the signed-in user's cart, creating it if needed.
       
-        /// <returns>New cart details</returns>
+        /// <returns>Cart details</returns>
         [HttpPost("create")]
         public async Task<ActionResult<Cart>> CreateCart()
         {
+            var userId = GetCurrentUserId();
+            if (userId is null) return Unauthorized();
+
             try
             {
+                var existingCart = await _context.Carts
+                    .Include(cart => cart.CartItems)
+                    .FirstOrDefaultAsync(cart => cart.UserId == userId);
+
+                if (existingCart is not null)
+                {
+                    return Ok(existingCart);
+                }
+
                 var cart = new Cart
                 {
+                    UserId = userId.Value,
                     SessionId = Guid.NewGuid().ToString(),
                     CreatedAt = DateTime.UtcNow
                 };
@@ -56,12 +70,15 @@ namespace OnlineShoppingApplication.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Cart>> GetCart(int id)
         {
+            var userId = GetCurrentUserId();
+            if (userId is null) return Unauthorized();
+
             try
             {
                 var cart = await _context.Carts
                     .Include(c => c.CartItems)
                     .ThenInclude(ci => ci.Product)
-                    .FirstOrDefaultAsync(c => c.Id == id);
+                    .FirstOrDefaultAsync(c => c.Id == id && c.UserId == userId);
 
                 if (cart == null)
                 {
@@ -86,6 +103,9 @@ namespace OnlineShoppingApplication.Controllers
         [HttpPost("{id}/add-item")]
         public async Task<ActionResult<Cart>> AddToCart(int id, [FromQuery] int productId, [FromQuery] int quantity = 1)
         {
+            var userId = GetCurrentUserId();
+            if (userId is null) return Unauthorized();
+
             try
             {
                 if (quantity <= 0)
@@ -95,7 +115,7 @@ namespace OnlineShoppingApplication.Controllers
 
                 var cart = await _context.Carts
                     .Include(c => c.CartItems)
-                    .FirstOrDefaultAsync(c => c.Id == id);
+                    .FirstOrDefaultAsync(c => c.Id == id && c.UserId == userId);
 
                 if (cart == null)
                 {
@@ -146,7 +166,7 @@ namespace OnlineShoppingApplication.Controllers
                 var updatedCart = await _context.Carts
                     .Include(c => c.CartItems)
                     .ThenInclude(ci => ci.Product)
-                    .FirstOrDefaultAsync(c => c.Id == id);
+                    .FirstOrDefaultAsync(c => c.Id == id && c.UserId == userId);
 
                 return Ok(updatedCart);
             }
@@ -165,11 +185,14 @@ namespace OnlineShoppingApplication.Controllers
         [HttpDelete("{id}/remove-item")]
         public async Task<ActionResult<Cart>> RemoveFromCart(int id, [FromQuery] int productId)
         {
+            var userId = GetCurrentUserId();
+            if (userId is null) return Unauthorized();
+
             try
             {
                 var cart = await _context.Carts
                     .Include(c => c.CartItems)
-                    .FirstOrDefaultAsync(c => c.Id == id);
+                    .FirstOrDefaultAsync(c => c.Id == id && c.UserId == userId);
 
                 if (cart == null)
                 {
@@ -190,7 +213,7 @@ namespace OnlineShoppingApplication.Controllers
                 var updatedCart = await _context.Carts
                     .Include(c => c.CartItems)
                     .ThenInclude(ci => ci.Product)
-                    .FirstOrDefaultAsync(c => c.Id == id);
+                    .FirstOrDefaultAsync(c => c.Id == id && c.UserId == userId);
 
                 return Ok(updatedCart);
             }
@@ -210,6 +233,9 @@ namespace OnlineShoppingApplication.Controllers
         [HttpPut("{id}/update-item")]
         public async Task<ActionResult<Cart>> UpdateCartItem(int id, [FromQuery] int productId, [FromQuery] int quantity)
         {
+            var userId = GetCurrentUserId();
+            if (userId is null) return Unauthorized();
+
             try
             {
                 if (quantity <= 0)
@@ -219,7 +245,7 @@ namespace OnlineShoppingApplication.Controllers
 
                 var cart = await _context.Carts
                     .Include(c => c.CartItems)
-                    .FirstOrDefaultAsync(c => c.Id == id);
+                    .FirstOrDefaultAsync(c => c.Id == id && c.UserId == userId);
 
                 if (cart == null)
                 {
@@ -252,7 +278,7 @@ namespace OnlineShoppingApplication.Controllers
                 var updatedCart = await _context.Carts
                     .Include(c => c.CartItems)
                     .ThenInclude(ci => ci.Product)
-                    .FirstOrDefaultAsync(c => c.Id == id);
+                    .FirstOrDefaultAsync(c => c.Id == id && c.UserId == userId);
 
                 return Ok(updatedCart);
             }
@@ -271,12 +297,15 @@ namespace OnlineShoppingApplication.Controllers
         [HttpGet("{id}/summary")]
         public async Task<ActionResult<PurchaseSummary>> GetPurchaseSummary(int id)
         {
+            var userId = GetCurrentUserId();
+            if (userId is null) return Unauthorized();
+
             try
             {
                 var cart = await _context.Carts
                     .Include(c => c.CartItems)
                     .ThenInclude(ci => ci.Product)
-                    .FirstOrDefaultAsync(c => c.Id == id);
+                    .FirstOrDefaultAsync(c => c.Id == id && c.UserId == userId);
 
                 if (cart == null)
                 {
@@ -340,11 +369,14 @@ namespace OnlineShoppingApplication.Controllers
         [HttpDelete("{id}/clear")]
         public async Task<ActionResult<object>> ClearCart(int id)
         {
+            var userId = GetCurrentUserId();
+            if (userId is null) return Unauthorized();
+
             try
             {
                 var cart = await _context.Carts
                     .Include(c => c.CartItems)
-                    .FirstOrDefaultAsync(c => c.Id == id);
+                    .FirstOrDefaultAsync(c => c.Id == id && c.UserId == userId);
 
                 if (cart == null)
                 {
@@ -360,6 +392,14 @@ namespace OnlineShoppingApplication.Controllers
             {
                 return StatusCode(500, new { message = "Error clearing cart", error = ex.Message });
             }
+        }
+
+        private int? GetCurrentUserId()
+        {
+            var value = User.FindFirstValue(ClaimTypes.NameIdentifier)
+                ?? User.FindFirstValue("sub");
+
+            return int.TryParse(value, out var userId) ? userId : null;
         }
     }
 }
