@@ -463,3 +463,8 @@ This only promotes an already-registered email; it cannot create accounts or cha
 `POST /api/Products`, `PUT /api/Products/{id}`, and `DELETE /api/Products/{id}` require the Admin role.
 
 ---
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> e360b299b71b84890aa934d0bc8d20017619909a
