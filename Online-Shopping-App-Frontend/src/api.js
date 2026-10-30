@@ -70,6 +70,28 @@ export const getProductById = (id) =>
 export const deleteProduct = (id) =>
   api.delete(`/api/Products/${id}`);
 
+export const updateProduct = (id, product) =>
+  api.put(`/api/Products/${id}`, product);
+
+// =========================
+// Admin APIs
+// =========================
+
+export const getAdminDashboard = () =>
+  api.get("/api/Admin/dashboard");
+
+export const getAdminOrders = () =>
+  api.get("/api/Admin/orders");
+
+export const updateAdminOrderStatus = (orderId, status) =>
+  api.put(`/api/Admin/orders/${orderId}/status`, { status });
+
+export const getAdminUsers = () =>
+  api.get("/api/Admin/users");
+
+export const updateAdminUserRole = (userId, isAdmin) =>
+  api.put(`/api/Admin/users/${userId}/role`, { isAdmin });
+
 // =========================
 // Cart APIs
 // =========================
@@ -100,5 +122,28 @@ export const getCartSummary = (cartId) =>
 
 export const clearCart = (cartId) =>
   api.delete(`/api/Cart/${cartId}/clear`);
+
+// =========================
+// Wishlist APIs
+// =========================
+
+export const getWishlist = () =>
+  api.get("/api/Wishlist");
+
+export const addToWishlist = (productId) =>
+  api.post(`/api/Wishlist/${productId}`);
+
+export const removeFromWishlist = (productId) =>
+  api.delete(`/api/Wishlist/${productId}`);
+
+// =========================
+// Order APIs
+// =========================
+
+export const checkout = (cartId) =>
+  api.post(`/api/Orders/checkout/${cartId}`);
+
+export const getOrders = () =>
+  api.get("/api/Orders");
 
 export default api;
