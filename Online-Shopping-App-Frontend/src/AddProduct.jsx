@@ -62,7 +62,7 @@ const AddProduct = ({ onProductAdded }) => {
             className="w-full rounded-lg border border-slate-700 bg-slate-800 px-4 py-2 text-sm outline-none"
             placeholder="Price"
             type="number"
-            min="0.01"
+            min="1"
             value={form.price}
             onChange={(e) => setForm({ ...form, price: e.target.value })}
             required

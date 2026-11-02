@@ -104,7 +104,7 @@ const Admin = () => {
     loadAdminData();
   }, [loadAdminData]);
 
-useEffect(() => {
+  useEffect(() => {
   if (!notice) return;
 
   const timer = setTimeout(() => {

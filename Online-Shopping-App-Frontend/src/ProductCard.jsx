@@ -7,18 +7,27 @@ const ProductCard = ({ product, onAddToCart, isCartReady = true, isWishlisted, o
         </h3>
 
         <div className="flex items-center gap-2">
-          <span className="rounded-full bg-emerald-100 px-3 py-1 text-sm font-medium text-emerald-700">
-            ₹{product.price}
-          </span>
-          <button
-            type="button"
-            onClick={() => onToggleWishlist(product)}
-            aria-label={isWishlisted ? `Remove ${product.name} from wishlist` : `Add ${product.name} to wishlist`}
-            aria-pressed={isWishlisted}
-            className="rounded-full px-2 py-1 text-xl text-rose-600 hover:bg-rose-50"
-          >
-            {isWishlisted ? "♥" : "♡"}
-          </button>
+          <div className="flex flex-col items-end gap-1">
+            <span className="rounded-full bg-emerald-100 px-3 py-1 text-sm font-medium text-emerald-700">
+              ₹{product.price}
+            </span>
+            {Number(product.discount) > 0 && (
+              <span className="rounded-full bg-rose-100 px-2.5 py-1 text-xs font-semibold text-rose-700">
+                {product.discount}% OFF
+              </span>
+            )}
+          </div>
+          {onToggleWishlist && (
+            <button
+              type="button"
+              onClick={() => onToggleWishlist(product)}
+              aria-label={isWishlisted ? `Remove ${product.name} from wishlist` : `Add ${product.name} to wishlist`}
+              aria-pressed={isWishlisted}
+              className="rounded-full px-2 py-1 text-xl text-rose-600 hover:bg-rose-50"
+            >
+              {isWishlisted ? "♥" : "♡"}
+            </button>
+          )}
         </div>
       </div>
 

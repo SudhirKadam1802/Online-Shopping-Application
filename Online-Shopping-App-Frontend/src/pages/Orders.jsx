@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { getAdminOrders, getOrders } from '../api';
+import { deleteAdminOrder, getAdminOrders, getOrders } from '../api';
 
 const formatPrice = (amount) => `₹${Number(amount).toFixed(2)}`;
 
@@ -7,6 +7,7 @@ const Orders = ({ isAdmin = false }) => {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [deletingOrderId, setDeletingOrderId] = useState(null);
 
   useEffect(() => {
     (isAdmin ? getAdminOrders() : getOrders())
@@ -14,6 +15,21 @@ const Orders = ({ isAdmin = false }) => {
       .catch(() => setError(`Unable to load ${isAdmin ? 'store' : 'your'} orders. Please try again.`))
       .finally(() => setLoading(false));
   }, [isAdmin]);
+
+  const handleDeleteOrder = async (order) => {
+    if (!window.confirm(`Delete cancelled order #${order.id}? This cannot be undone.`)) return;
+
+    setDeletingOrderId(order.id);
+    setError('');
+    try {
+      await deleteAdminOrder(order.id);
+      setOrders((currentOrders) => currentOrders.filter(({ id }) => id !== order.id));
+    } catch (requestError) {
+      setError(requestError.response?.data?.message || 'Unable to delete this order. Please try again.');
+    } finally {
+      setDeletingOrderId(null);
+    }
+  };
 
   if (loading) return <p className="text-slate-600">Loading orders...</p>;
 
@@ -38,7 +54,19 @@ const Orders = ({ isAdmin = false }) => {
               )}
               <p className="text-sm text-slate-500">Status: {order.status || 'Placed'}</p>
             </div>
-            <time className="text-sm text-slate-500">{new Date(order.createdAt).toLocaleString()}</time>
+            <div className="flex items-center gap-4">
+              <time className="text-sm text-slate-500">{new Date(order.createdAt).toLocaleString()}</time>
+              {isAdmin && order.status?.toLowerCase() === 'cancelled' && (
+                <button
+                  type="button"
+                  onClick={() => handleDeleteOrder(order)}
+                  disabled={deletingOrderId === order.id}
+                  className="rounded-lg bg-red-600 px-3 py-2 text-sm font-semibold text-white hover:bg-red-700 disabled:cursor-not-allowed disabled:opacity-50"
+                >
+                  {deletingOrderId === order.id ? 'Deleting...' : 'Delete order'}
+                </button>
+              )}
+            </div>
           </div>
           <ul className="space-y-2">
             {order.items?.map((item) => (

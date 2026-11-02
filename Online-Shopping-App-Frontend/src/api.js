@@ -83,6 +83,9 @@ export const getAdminDashboard = () =>
 export const getAdminOrders = () =>
   api.get("/api/Admin/orders");
 
+export const deleteAdminOrder = (orderId) =>
+  api.delete(`/api/Admin/orders/${orderId}`);
+
 export const updateAdminOrderStatus = (orderId, status) =>
   api.put(`/api/Admin/orders/${orderId}/status`, { status });
 

@@ -75,6 +75,23 @@ namespace OnlineShoppingApplication.Controllers
             return Ok(orders);
         }
 
+        [HttpDelete("orders/{orderId:int}")]
+        public async Task<IActionResult> DeleteCancelledOrder(int orderId)
+        {
+            var order = await _context.Orders
+                .FirstOrDefaultAsync(order => order.Id == orderId);
+
+            if (order is null) return NotFound(new { message = "Order not found." });
+            if (!order.Status.Equals("Cancelled", StringComparison.OrdinalIgnoreCase))
+            {
+                return Conflict(new { message = "Only cancelled orders can be deleted." });
+            }
+
+            _context.Orders.Remove(order);
+            await _context.SaveChangesAsync();
+            return NoContent();
+        }
+
         [HttpPut("orders/{orderId:int}/status")]
         public async Task<IActionResult> UpdateOrderStatus(
             int orderId,

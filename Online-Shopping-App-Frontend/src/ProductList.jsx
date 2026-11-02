@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { addToWishlist, getProducts, getWishlist, removeFromWishlist } from './api';
 import ProductCard from './ProductCard';
 
-const ProductList = ({ onAddToCart, isCartReady = true, refreshToken = 0 }) => {
+const ProductList = ({ onAddToCart, isCartReady = true, isAdmin = false, refreshToken = 0 }) => {
   const [products, setProducts] = useState([]);
   const [wishlistIds, setWishlistIds] = useState([]);
   const [search, setSearch] = useState('');
@@ -18,10 +18,10 @@ const ProductList = ({ onAddToCart, isCartReady = true, refreshToken = 0 }) => {
         setLoading(true);
         const [response, wishlistResponse] = await Promise.all([
           getProducts(),
-          getWishlist(),
+          isAdmin ? Promise.resolve(null) : getWishlist(),
         ]);
         setProducts(response.data);
-        setWishlistIds(wishlistResponse.data.map((product) => product.id));
+        setWishlistIds(wishlistResponse?.data.map((product) => product.id) || []);
       } catch (err) {
         setError('Unable to load products.');
       } finally {
@@ -30,7 +30,7 @@ const ProductList = ({ onAddToCart, isCartReady = true, refreshToken = 0 }) => {
     };
 
     loadProducts();
-  }, [refreshToken]);
+  }, [isAdmin, refreshToken]);
 
   const toggleWishlist = async (product) => {
     const isWishlisted = wishlistIds.includes(product.id);
@@ -106,7 +106,7 @@ const ProductList = ({ onAddToCart, isCartReady = true, refreshToken = 0 }) => {
               onAddToCart={onAddToCart}
               isCartReady={isCartReady}
               isWishlisted={wishlistIds.includes(product.id)}
-              onToggleWishlist={toggleWishlist}
+              onToggleWishlist={isAdmin ? undefined : toggleWishlist}
             />
           ))}
         </div>

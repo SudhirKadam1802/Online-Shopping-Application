@@ -70,6 +70,44 @@ namespace OnlineShoppingApplication.Tests.Controllers
         }
 
         [Fact]
+        public async Task DeleteCancelledOrder_RemovesOrderAndItems()
+        {
+            await using var context = await CreateDbContext();
+            var order = new Order
+            {
+                UserId = 1,
+                Status = "Cancelled",
+                Items = new List<OrderItem>
+                {
+                    new() { ProductId = 1, ProductName = "Laptop", Quantity = 1, UnitPrice = 100 }
+                }
+            };
+            context.Orders.Add(order);
+            await context.SaveChangesAsync();
+            var orderId = order.Id;
+
+            var result = await new AdminController(context).DeleteCancelledOrder(orderId);
+
+            Assert.IsType<NoContentResult>(result);
+            Assert.Null(await context.Orders.FindAsync(orderId));
+            Assert.Empty(await context.OrderItems.ToListAsync());
+        }
+
+        [Fact]
+        public async Task DeleteCancelledOrder_RejectsActiveOrder()
+        {
+            await using var context = await CreateDbContext();
+            var order = new Order { UserId = 1, Status = "Placed" };
+            context.Orders.Add(order);
+            await context.SaveChangesAsync();
+
+            var result = await new AdminController(context).DeleteCancelledOrder(order.Id);
+
+            Assert.IsType<ConflictObjectResult>(result);
+            Assert.NotNull(await context.Orders.FindAsync(order.Id));
+        }
+
+        [Fact]
         public async Task GetUsers_DoesNotReturnPasswordHashes()
         {
             await using var context = await CreateDbContext();
