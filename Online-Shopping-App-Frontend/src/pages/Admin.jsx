@@ -104,6 +104,16 @@ const Admin = () => {
     loadAdminData();
   }, [loadAdminData]);
 
+useEffect(() => {
+  if (!notice) return;
+
+  const timer = setTimeout(() => {
+    setNotice('');
+  }, 3000);
+
+  return () => clearTimeout(timer);
+}, [notice]);
+
   const saveProduct = async (event) => {
     event.preventDefault();
     setSaving(true);
