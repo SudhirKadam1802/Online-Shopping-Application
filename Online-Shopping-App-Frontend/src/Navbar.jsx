@@ -49,6 +49,7 @@ const Navbar = ({ cartCount }) => {
 
         {/* Navigation */}
         <div className="flex items-center gap-5">
+         
           <Link
             to="/"
             className="rounded-lg px-4 py-2 text-white transition-all duration-300 hover:bg-white/10 hover:text-purple-100"
