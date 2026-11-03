@@ -12,7 +12,7 @@
     },
     "https": {
       "launchBrowser": true,
-      "launchUrl": "swagger",
+      "launchUrl" : "swagger",
       "hotReloadEnabled": false,
       "commandName": "Project",
       "environmentVariables": {

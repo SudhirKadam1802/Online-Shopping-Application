@@ -17,7 +17,6 @@ const Navbar = ({ cartCount }) => {
 
     loadUser();
 
-    // Update navbar whenever localStorage changes
     window.addEventListener("storage", loadUser);
     window.addEventListener("auth-changed", loadUser);
 
@@ -30,41 +29,47 @@ const Navbar = ({ cartCount }) => {
   const handleLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
-
-    // Reload application
     window.location.href = "/login";
   };
 
+  const navLink =
+    "rounded-lg px-4 py-2.5 text-sm font-semibold text-gray-200 transition-all duration-300 hover:bg-orange-500/15 hover:text-orange-400";
+
   return (
-    <nav className="sticky top-0 z-50 bg-gradient-to-r from-violet-400 via-purple-500 to-fuchsia-400 shadow-lg">
+    <nav className="sticky top-0 z-50 border-b border-orange-500/20 bg-gradient-to-r from-[#171717] via-[#242424] to-[#171717] shadow-[0_4px_20px_rgba(0,0,0,0.25)]">
+
       <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
+
         {/* Logo */}
         <Link
           to="/"
-          className="flex items-center gap-2 text-2xl font-bold tracking-wide text-white"
+          className="group flex items-center gap-3"
         >
-          🛍️
-          <span>Online Shopping</span>
+          <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-orange-400 to-orange-600 text-2xl shadow-lg shadow-orange-500/20 transition-transform duration-300 group-hover:scale-110">
+            🛍️
+          </span>
+
+          <span className="text-2xl font-extrabold tracking-tight text-white">
+            Online
+            <span className="text-orange-400"> Shopping</span>
+          </span>
         </Link>
 
         {/* Navigation */}
-        <div className="flex items-center gap-5">
-         
-          <Link
-            to="/"
-            className="rounded-lg px-4 py-2 text-white transition-all duration-300 hover:bg-white/10 hover:text-purple-100"
-          >
+        <div className="flex items-center gap-3">
+
+          <Link to="/" className={navLink}>
             Home
           </Link>
 
           {!user?.isAdmin && (
             <Link
               to="/cart"
-              className="flex items-center gap-2 rounded-full bg-white/20 px-5 py-2.5 font-semibold text-white backdrop-blur-md transition-all duration-300 hover:scale-105 hover:bg-white/30"
+              className="flex items-center gap-2 rounded-xl border border-orange-400/20 bg-orange-500/10 px-4 py-2.5 text-sm font-semibold text-orange-300 transition-all duration-300 hover:border-orange-400/50 hover:bg-orange-500/20"
             >
               🛒 Cart
 
-              <span className="flex h-7 w-7 items-center justify-center rounded-full bg-white text-sm font-bold text-purple-600">
+              <span className="flex h-6 min-w-6 items-center justify-center rounded-full bg-orange-500 px-1.5 text-xs font-bold text-black">
                 {cartCount}
               </span>
             </Link>
@@ -73,24 +78,19 @@ const Navbar = ({ cartCount }) => {
           {user && (
             <>
               {user.isAdmin && (
-                <Link
-                  to="/admin"
-                  className="rounded-lg px-3 py-2 font-semibold text-white transition hover:bg-white/10"
-                >
-                  Admin
+                <Link to="/admin" className={navLink}>
+                  ⚙️ Admin
                 </Link>
               )}
-              <Link
-                to="/wishlist"
-                className="rounded-lg px-3 py-2 text-white transition hover:bg-white/10"
-              >
-                Wishlist
-              </Link>
-              <Link
-                to="/orders"
-                className="rounded-lg px-3 py-2 text-white transition hover:bg-white/10"
-              >
-                Orders
+
+              {!user.isAdmin && (
+                <Link to="/wishlist" className={navLink}>
+                  ❤️ Wishlist
+                </Link>
+              )}
+
+              <Link to="/orders" className={navLink}>
+                📦 Orders
               </Link>
             </>
           )}
@@ -99,32 +99,33 @@ const Navbar = ({ cartCount }) => {
             <>
               <Link
                 to="/login"
-                className="rounded-lg bg-white px-4 py-2 font-semibold text-purple-600 transition hover:bg-purple-100"
+                className="rounded-xl bg-orange-500 px-5 py-2.5 text-sm font-bold text-black shadow-md shadow-orange-500/20 transition-all duration-300 hover:-translate-y-0.5 hover:bg-orange-400 hover:shadow-orange-500/40"
               >
                 Login
               </Link>
 
               <Link
                 to="/signup"
-                className="rounded-lg border border-white px-4 py-2 font-semibold text-white transition hover:bg-white hover:text-purple-600"
+                className="rounded-xl border border-orange-400/60 px-5 py-2.5 text-sm font-bold text-orange-400 transition-all duration-300 hover:bg-orange-500 hover:text-black"
               >
                 Sign Up
               </Link>
             </>
           ) : (
             <>
-              <div className="rounded-full bg-white/20 px-4 py-2 font-semibold text-white">
-                👋 Welcome, {user.name}
+              <div className="rounded-xl border border-gray-600 bg-white/5 px-4 py-2.5 text-sm font-medium text-gray-200">
+                👋 Welcome, <span className="font-bold text-orange-400">{user.name}</span>
               </div>
 
               <button
                 onClick={handleLogout}
-                className="rounded-lg bg-red-500 px-4 py-2 font-semibold text-white transition hover:bg-red-600"
+                className="rounded-xl border border-red-500/40 bg-red-500/10 px-5 py-2.5 text-sm font-bold text-red-400 transition-all duration-300 hover:bg-red-500 hover:text-white"
               >
                 Logout
               </button>
             </>
           )}
+
         </div>
       </div>
     </nav>
