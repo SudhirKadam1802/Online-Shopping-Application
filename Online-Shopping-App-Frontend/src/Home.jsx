@@ -83,12 +83,12 @@ const Home = ({
         {/* Left Section */}
         <div className="space-y-6">
 
-          <div className="rounded-2xl bg-gradient-to-r from-cyan-500 to-blue-600 p-8 text-white shadow-lg">
-            <h1 className="text-3xl font-semibold">
+          <div className="relative overflow-hidden rounded-3xl border border-orange-400/20 bg-gradient-to-r from-[#171717] via-[#242424] to-[#171717] p-8 text-white shadow-xl shadow-black/20 ring-1 ring-orange-200/10 before:absolute before:-right-16 before:-top-20 before:size-64 before:rounded-full before:bg-orange-500/15 before:blur-2xl">
+            <h1 className="relative text-3xl font-bold tracking-tight sm:text-4xl">
               Welcome to your online store
             </h1>
 
-            <p className="mt-2 text-cyan-50">
+            <p className="relative mt-3 max-w-2xl text-sm leading-6 text-gray-300 sm:text-base">
               Browse products, manage your cart, and review your purchase
               summary.
             </p>
