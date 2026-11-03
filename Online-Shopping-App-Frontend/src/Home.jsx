@@ -83,7 +83,7 @@ const Home = ({
         {/* Left Section */}
         <div className="space-y-6">
 
-          <div className="relative overflow-hidden rounded-3xl border border-orange-400/20 bg-gradient-to-r from-[#171717] via-[#242424] to-[#171717] p-8 text-white shadow-xl shadow-black/20 ring-1 ring-orange-200/10 before:absolute before:-right-16 before:-top-20 before:size-64 before:rounded-full before:bg-orange-500/15 before:blur-2xl">
+          <div className="relative overflow-hidden rounded-3xl border border-sky-400/20 bg-gradient-to-r from-[#171717] via-[#242424] to-[#171717] p-8 text-white shadow-xl shadow-black/20 ring-1 ring-sky-200/10 before:absolute before:-right-16 before:-top-20 before:size-64 before:rounded-full before:bg-sky-500/15 before:blur-2xl">
             <h1 className="relative text-3xl font-bold tracking-tight sm:text-4xl">
               Welcome to your online store
             </h1>

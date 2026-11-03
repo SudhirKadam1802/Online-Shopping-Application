@@ -46,7 +46,7 @@ const nextOrderStatuses = {
 const formatPrice = (value) => `₹${Number(value).toFixed(2)}`;
 
 const metricCards = [
-  { key: 'totalProducts', label: 'Products', icon: Boxes, color: 'bg-violet-100 text-violet-700' },
+  { key: 'totalProducts', label: 'Products', icon: Boxes, color: 'bg-sky-100 text-sky-700' },
   { key: 'totalUsers', label: 'Registered users', icon: UsersRound, color: 'bg-sky-100 text-sky-700' },
   { key: 'activeOrders', label: 'Active orders', icon: ClipboardList, color: 'bg-amber-100 text-amber-700' },
   { key: 'totalSales', label: 'Total sales', icon: CircleDollarSign, color: 'bg-emerald-100 text-emerald-700', currency: true },
@@ -55,7 +55,7 @@ const metricCards = [
 const statusStyles = {
   Placed: 'border-sky-200 bg-sky-50 text-sky-700',
   Processing: 'border-amber-200 bg-amber-50 text-amber-700',
-  Shipped: 'border-violet-200 bg-violet-50 text-violet-700',
+  Shipped: 'border-blue-200 bg-blue-50 text-blue-700',
   Delivered: 'border-emerald-200 bg-emerald-50 text-emerald-700',
   Cancelled: 'border-red-200 bg-red-50 text-red-700',
 };
@@ -215,7 +215,7 @@ const Admin = () => {
   if (loading && !dashboard) {
     return (
       <div className="flex min-h-64 items-center justify-center gap-3 text-slate-500">
-        <LoaderCircle className="h-5 w-5 animate-spin text-violet-600" />
+        <LoaderCircle className="h-5 w-5 animate-spin text-sky-500" />
         Loading your dashboard...
       </div>
     );
@@ -223,16 +223,16 @@ const Admin = () => {
 
   return (
     <div className="mx-auto max-w-[1440px] space-y-8 pb-12">
-      <header className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-slate-950 via-violet-950 to-indigo-900 px-6 py-8 text-white shadow-xl sm:px-9 sm:py-10">
-        <div className="pointer-events-none absolute -right-10 -top-24 h-72 w-72 rounded-full bg-violet-500/20 blur-3xl" />
+      <header className="relative overflow-hidden rounded-3xl border border-sky-400/20 bg-gradient-to-r from-[#171717] via-[#242424] to-[#171717] px-6 py-8 text-white shadow-xl shadow-black/20 sm:px-9 sm:py-10">
+        <div className="pointer-events-none absolute -right-10 -top-24 h-72 w-72 rounded-full bg-sky-500/15 blur-3xl" />
         <div className="relative flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
           <div>
-            <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.16em] text-violet-100">
+            <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-sky-400/25 bg-sky-500/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.16em] text-sky-200">
               <ShieldCheck className="h-3.5 w-3.5" />
               Store management
             </div>
             <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">Admin dashboard</h1>
-            <p className="mt-2 max-w-xl text-sm text-violet-100/80 sm:text-base">
+            <p className="mt-2 max-w-xl text-sm text-gray-300 sm:text-base">
               Manage your catalog, keep orders moving, and see how your store is performing.
             </p>
           </div>
@@ -240,19 +240,19 @@ const Admin = () => {
             type="button"
             onClick={loadAdminData}
             disabled={loading}
-            className="inline-flex items-center justify-center gap-2 self-start rounded-xl border border-white/20 bg-white/10 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-white/20 focus:outline-none focus:ring-2 focus:ring-white/70 disabled:opacity-60 sm:self-auto"
+            className="inline-flex items-center justify-center gap-2 self-start rounded-xl border border-sky-400/30 bg-sky-500/10 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-sky-500/20 focus:outline-none focus:ring-2 focus:ring-sky-400 disabled:opacity-60 sm:self-auto"
           >
             <RefreshCw className={`h-4 w-4 ${loading ? 'animate-spin' : ''}`} />
             Refresh data
           </button>
         </div>
-        <nav aria-label="Admin dashboard sections" className="relative mt-7 flex flex-wrap gap-2 border-t border-white/15 pt-5">
+        <nav aria-label="Admin dashboard sections" className="relative mt-7 flex flex-wrap gap-2 border-t border-sky-500/20 pt-5">
           {[
             ['#admin-products', 'Products'],
             ['#admin-orders', 'Orders'],
             ['#admin-users', 'Users'],
           ].map(([href, label]) => (
-            <a key={href} href={href} className="rounded-lg px-3 py-1.5 text-sm font-medium text-violet-100 transition hover:bg-white/10 hover:text-white">
+            <a key={href} href={href} className="rounded-lg px-3 py-1.5 text-sm font-medium text-gray-200 transition hover:bg-sky-500/15 hover:text-sky-300">
               {label}
             </a>
           ))}
@@ -318,7 +318,7 @@ const Admin = () => {
             </div>
             <label className="relative block w-full sm:max-w-xs">
               <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
-              <input aria-label="Search products in admin catalog" value={productSearch} onChange={(event) => setProductSearch(event.target.value)} placeholder="Search products or categories" className="w-full rounded-xl border border-slate-200 bg-slate-50 py-2.5 pl-9 pr-3 text-sm outline-none transition focus:border-violet-400 focus:bg-white focus:ring-4 focus:ring-violet-100" />
+              <input aria-label="Search products in admin catalog" value={productSearch} onChange={(event) => setProductSearch(event.target.value)} placeholder="Search products or categories" className="w-full rounded-xl border border-slate-200 bg-slate-50 py-2.5 pl-9 pr-3 text-sm outline-none transition focus:border-sky-400 focus:bg-white focus:ring-4 focus:ring-sky-100" />
             </label>
           </div>
           <div className="overflow-x-auto">
@@ -350,7 +350,7 @@ const Admin = () => {
                     </td>
                     <td className="px-4 py-3.5">
                       <div className="flex items-center gap-3">
-                        <button type="button" onClick={() => startEditing(product)} className="rounded-lg px-2.5 py-1.5 font-semibold text-violet-700 transition hover:bg-violet-50 focus:outline-none focus:ring-2 focus:ring-violet-300">Edit</button>
+                        <button type="button" onClick={() => startEditing(product)} className="rounded-lg px-2.5 py-1.5 font-semibold text-sky-700 transition hover:bg-sky-50 focus:outline-none focus:ring-2 focus:ring-sky-300">Edit</button>
                         <button type="button" onClick={() => removeProduct(product)} className="rounded-lg px-2.5 py-1.5 font-semibold text-rose-700 transition hover:bg-rose-50 focus:outline-none focus:ring-2 focus:ring-rose-300">Delete</button>
                       </div>
                     </td>
@@ -367,7 +367,7 @@ const Admin = () => {
         <form id="admin-product-form" onSubmit={saveProduct} className="space-y-4 self-start rounded-2xl border border-slate-200/80 bg-white p-5 shadow-sm xl:sticky xl:top-24">
           <div className="flex items-center justify-between gap-3">
             <div>
-              <p className="text-xs font-semibold uppercase tracking-wider text-violet-600">{editingProductId === null ? 'Catalog' : `Editing #${editingProductId}`}</p>
+              <p className="text-xs font-semibold uppercase tracking-wider text-sky-600">{editingProductId === null ? 'Catalog' : `Editing #${editingProductId}`}</p>
               <h2 className="mt-1 text-xl font-semibold text-slate-950">{editingProductId === null ? 'Add a product' : 'Edit product'}</h2>
             </div>
             {editingProductId !== null && (
@@ -394,7 +394,7 @@ const Admin = () => {
               <input required type="number" min="0" max="100" step="1" value={productForm.discount} onChange={(event) => setProductForm({ ...productForm, discount: event.target.value })} className="w-full rounded-lg border border-slate-300 px-3 py-2 text-slate-900" />
             </label>
           </div>
-          <button disabled={saving} className="w-full rounded-xl bg-gradient-to-r from-violet-600 to-indigo-600 px-4 py-3 font-semibold text-white shadow-sm transition hover:from-violet-700 hover:to-indigo-700 focus:outline-none focus:ring-4 focus:ring-violet-200 disabled:cursor-not-allowed disabled:opacity-60">
+          <button disabled={saving} className="w-full rounded-xl bg-gradient-to-r from-sky-600 to-blue-700 px-4 py-3 font-semibold text-white shadow-sm shadow-sky-900/15 transition hover:from-sky-500 hover:to-blue-600 focus:outline-none focus:ring-4 focus:ring-sky-200 disabled:cursor-not-allowed disabled:opacity-60">
             {saving ? 'Saving...' : editingProductId === null ? 'Create product' : 'Save changes'}
           </button>
         </form>
@@ -409,9 +409,9 @@ const Admin = () => {
           <div className="flex flex-col gap-2 sm:flex-row">
             <label className="relative">
               <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
-              <input aria-label="Search orders" value={orderSearch} onChange={(event) => setOrderSearch(event.target.value)} placeholder="Search order or customer" className="w-full rounded-xl border border-slate-200 bg-slate-50 py-2.5 pl-9 pr-3 text-sm outline-none focus:border-violet-400 focus:bg-white focus:ring-4 focus:ring-violet-100 sm:w-56" />
+              <input aria-label="Search orders" value={orderSearch} onChange={(event) => setOrderSearch(event.target.value)} placeholder="Search order or customer" className="w-full rounded-xl border border-slate-200 bg-slate-50 py-2.5 pl-9 pr-3 text-sm outline-none focus:border-sky-400 focus:bg-white focus:ring-4 focus:ring-sky-100 sm:w-56" />
             </label>
-            <select aria-label="Filter orders by status" value={orderStatusFilter} onChange={(event) => setOrderStatusFilter(event.target.value)} className="rounded-xl border border-slate-200 bg-slate-50 px-3 py-2.5 text-sm outline-none focus:border-violet-400 focus:ring-4 focus:ring-violet-100">
+            <select aria-label="Filter orders by status" value={orderStatusFilter} onChange={(event) => setOrderStatusFilter(event.target.value)} className="rounded-xl border border-slate-200 bg-slate-50 px-3 py-2.5 text-sm outline-none focus:border-sky-400 focus:ring-4 focus:ring-sky-100">
               <option value="">All statuses</option>
               {orderStatuses.map((status) => <option key={status} value={status}>{status}</option>)}
             </select>
@@ -435,7 +435,7 @@ const Admin = () => {
                 const canUpdate = availableStatuses.length > 1;
                 return (
                 <tr key={order.id} className="transition hover:bg-slate-50/80">
-                  <td className="px-4 py-3.5 font-semibold text-violet-700">#{order.id}</td>
+                  <td className="px-4 py-3.5 font-semibold text-sky-700">#{order.id}</td>
                   <td className="px-4 py-3.5">
                     <p className="font-medium text-slate-800">{order.customerName || `User ${order.userId}`}</p>
                     <p className="mt-0.5 text-xs text-slate-500">{order.items?.length || 0} line items</p>
@@ -450,7 +450,7 @@ const Admin = () => {
                         value={status}
                         disabled={!canUpdate || updatingOrderId !== null}
                         onChange={(event) => changeOrderStatus(order.id, event.target.value)}
-                        className="max-w-36 rounded-lg border border-slate-200 bg-white px-2 py-1.5 text-xs outline-none focus:border-violet-400 focus:ring-2 focus:ring-violet-100 disabled:bg-slate-100"
+                        className="max-w-36 rounded-lg border border-slate-200 bg-white px-2 py-1.5 text-xs outline-none focus:border-sky-400 focus:ring-2 focus:ring-sky-100 disabled:bg-slate-100"
                       >
                         {availableStatuses.map((availableStatus) => (
                           <option key={availableStatus} value={availableStatus}>{availableStatus}</option>
@@ -477,7 +477,7 @@ const Admin = () => {
           </div>
           <label className="relative block w-full sm:max-w-xs">
             <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
-            <input aria-label="Search users" value={userSearch} onChange={(event) => setUserSearch(event.target.value)} placeholder="Search name or email" className="w-full rounded-xl border border-slate-200 bg-slate-50 py-2.5 pl-9 pr-3 text-sm outline-none focus:border-violet-400 focus:bg-white focus:ring-4 focus:ring-violet-100" />
+            <input aria-label="Search users" value={userSearch} onChange={(event) => setUserSearch(event.target.value)} placeholder="Search name or email" className="w-full rounded-xl border border-slate-200 bg-slate-50 py-2.5 pl-9 pr-3 text-sm outline-none focus:border-sky-400 focus:bg-white focus:ring-4 focus:ring-sky-100" />
           </label>
         </div>
         <div className="overflow-x-auto">
@@ -496,7 +496,7 @@ const Admin = () => {
                   <td className="px-4 py-3.5 font-semibold text-slate-900">{user.name}</td>
                   <td className="px-4 py-3.5 text-slate-600">{user.email}</td>
                   <td className="px-4 py-3.5">
-                    <span className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-semibold ${user.isAdmin ? 'bg-violet-100 text-violet-800' : 'bg-slate-100 text-slate-600'}`}>
+                    <span className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-semibold ${user.isAdmin ? 'bg-sky-100 text-sky-800' : 'bg-slate-100 text-slate-600'}`}>
                       {user.isAdmin && <ShieldCheck className="h-3.5 w-3.5" />}
                       {user.isAdmin ? 'Admin' : 'Customer'}
                     </span>
@@ -506,7 +506,7 @@ const Admin = () => {
                       type="button"
                       onClick={() => changeUserRole(user, !user.isAdmin)}
                       disabled={updatingUserId !== null}
-                      className="font-semibold text-violet-700 hover:underline disabled:cursor-wait disabled:opacity-50"
+                      className="font-semibold text-sky-700 hover:underline disabled:cursor-wait disabled:opacity-50"
                     >
                       {updatingUserId === user.id ? 'Updating...' : user.isAdmin ? 'Revoke admin' : 'Grant admin'}
                     </button>
