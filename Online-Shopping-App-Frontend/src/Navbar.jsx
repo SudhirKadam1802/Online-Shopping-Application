@@ -77,13 +77,15 @@ const Navbar = ({ cartCount }) => {
             >
               <span className="relative inline-flex">
                 <ShoppingCart size={18} aria-hidden="true" />
-                <span
-                  key={cartCount}
-                  aria-label={`${cartCount} items in cart`}
-                  className="absolute -right-2 -top-2 flex h-4 min-w-4 animate-[cart-count-pop_180ms_ease-out] items-center justify-center rounded-full border border-[#242424] bg-violet-600 px-1 text-[10px] font-bold leading-none text-white"
-                >
-                  {cartCount}
-                </span>
+                {cartCount > 0 && (
+                  <span
+                    key={cartCount}
+                    aria-label={`${cartCount} items in cart`}
+                    className="absolute -right-2 -top-2 flex h-4 min-w-4 animate-[cart-count-pop_180ms_ease-out] items-center justify-center rounded-full border border-[#242424] bg-violet-600 px-1 text-[10px] font-bold leading-none text-white"
+                  >
+                    {cartCount}
+                  </span>
+                )}
               </span>
               Cart
             </Link>
