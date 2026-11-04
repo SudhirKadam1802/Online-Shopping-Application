@@ -53,6 +53,10 @@ const Cart = ({ cartId, onCartChanged }) => {
     }
   };
 
+  <div>
+    hii
+  </div>
+
   const handleRemove = async (productId) => {
     try {
       await removeCartItem(cartId, productId);
