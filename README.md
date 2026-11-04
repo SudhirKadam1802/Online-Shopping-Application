@@ -1,470 +1,149 @@
-# 🛒 Online Shopping Web Application
+# Cart Avenue
 
-A full-stack **Online Shopping Web Application** built using **ASP.NET Core Web API**, **React.js (Vite)**, **Entity Framework Core**, and **SQL Server**. The application allows users to register, log in securely, browse products, manage their shopping cart, automatically apply discounts, and view a detailed purchase summary.
+A full-stack online shopping application built with React, ASP.NET Core Web API, Entity Framework Core, and SQL Server. Customers can browse products, manage a cart and wishlist, and place demo orders. Administrators can manage products, orders, and user roles.
 
------
+## Features
 
-# 📌 Project Overview
+- User registration and JWT-based login
+- Protected customer and administrator pages
+- Product search, category and price filters, stock display, and product-level discounts
+- Shopping cart with quantity updates and purchase summary
+- Product-level discounts: each discounted product's percentage is applied to its own cart line; products without a discount remain full price
+- Wishlist and order history
+- Demo checkout that checks and deducts stock (no payment is collected)
+- Admin dashboard for product, order, and user-role management
+- Swagger API documentation in the backend development environment
 
-This project was developed as part of a **Technical Evaluation Assignment** to demonstrate full-stack development skills using modern web technologies.
+## Technology
 
-The application provides a seamless shopping experience with secure user authentication, product management, shopping cart functionality, automatic discount calculation, and a responsive user interface.
+- **Frontend:** React 18, Vite, Tailwind CSS, Axios, React Router
+- **Backend:** ASP.NET Core Web API on .NET 10, Entity Framework Core 10, JWT authentication
+- **Database:** SQL Server
+- **Tests:** xUnit and EF Core InMemory
 
------
-
-# 🎯 Objectives
-
-- Build a secure full-stack web application.
-- Implement Authentication and Authorization.
-- Perform CRUD operations using REST APIs.
-- Manage products and shopping cart.
-- Apply business logic for discounts.
-- Display purchase summary.
-- Follow clean code and component-based architecture.
-
------
-
-# 🚀 Features
-
-## 🔐 Authentication
-
-- User Registration
-- User Login
-- User Logout
-- Secure Authentication
-- Session Management using Local Storage
-- Protected Routes
-- User Welcome Message after Login
-
-## Product Management
-
-- View all available products
-- Add new products
-- Display product name, description, price, and stock
-- Responsive product cards
-
-## Shopping Cart
-
-- Create shopping cart
-- Add products to cart
-- Update product quantity
-- Remove products from cart
-- Clear shopping cart
-
-## Purchase Summary
-
-- Total Items
-- Subtotal
-- Automatic Discount Calculation
-- Grand Total
-
-
-------
-
-# 💻  Technology Stack
-
-## Backend
-
-- ASP.NET Core Web API (.NET 10)
-- C#
-- Entity Framework Core
-- SQL Server
-- Swagger
-
-## Frontend
-
-- React.js (Vite)
-- Tailwind CSS
-- Axios
-- React Router DOM
-- React Hooks
-
-## Database
-
-- SQL Server
-
-## Development Tools
-
-- Visual Studio 2022
-- Visual Studio Code
-- SQL Server Management Studio (SSMS)
-- Git
-- GitHub
-- Postman
-
----
-
-# 🏗 Project Architecture
-
-```
-React Frontend
-        │
-        ▼
-Axios HTTP Requests
-        │
-        ▼
-ASP.NET Core Web API
-        │
-        ▼
-Controllers
-        │
-        ▼
-Services
-        │
-        ▼
-Entity Framework Core
-        │
-        ▼
-SQL Server Database
-```
-
----
-
-# 📂 Project Structure
-
-```
-OnlineShoppingApplication
-
-Backend
-│
-├── Controllers
-│   ├── AuthController.cs
-│   ├── ProductsController.cs
-│   └── CartController.cs
-│
-├── Models
-│   ├── User.cs
-│   ├── Product.cs
-│   ├── Cart.cs
-│   └── CartItem.cs
-│
-├── DTOs
-├── Services
-├── Data
-├── Migrations
-├── Properties
-├── Program.cs
-└── appsettings.json
-
-
-Frontend
-│
-├── src
-│   ├── components
-│   │   ├── Navbar.jsx
-│   │   ├── ProductCard.jsx
-│   │   ├── Cart.jsx
-│   │   ├── CartItem.jsx
-│   │   ├── PurchaseSummary.jsx
-│   │   ├── Login.jsx
-│   │   └── Register.jsx
-│   │
-│   ├── api.js
-│   ├── App.jsx
-│   ├── main.jsx
-│   └── index.css
-│
-├── package.json
-└── vite.config.js
-```
-
----
-
-# 🔑 Authentication Flow
-
-```
-User Registration
-        │
-        ▼
-User Login
-        │
-        ▼
-Credentials Validated
-        │
-        ▼
-User Session Created
-        │
-        ▼
-Protected Home Page
-        │
-        ▼
-User Logout
-```
-
----
-
-# 📡 REST APIs
-
-## Authentication APIs
-
-| Method | Endpoint | Description |
-|---------|----------|-------------|
-| POST | /api/Auth/register | Register User |
-| POST | /api/Auth/login | User Login |
-
----
-
-## Product APIs
-
-| Method | Endpoint | Description |
-|---------|----------|-------------|
-| GET | /api/Products | Get All Products |
-| GET | /api/Products/{id} | Get Product by Id |
-| POST | /api/Products | Add Product |
-| DELETE | /api/Products/{id} | Delete Product |
-
----
-
-## Cart APIs
-
-| Method | Endpoint | Description |
-|---------|----------|-------------|
-| POST | /api/Cart/create | Create Cart |
-| GET | /api/Cart/{id} | Get Cart |
-| POST | /api/Cart/{id}/add-item | Add Product |
-| PUT | /api/Cart/{id}/update-item | Update Quantity |
-| DELETE | /api/Cart/{id}/remove-item | Remove Product |
-| DELETE | /api/Cart/{id}/clear | Clear Cart |
-| GET | /api/Cart/{id}/summary | Purchase Summary |
-
----
-
-# 💵 Discount Logic
-
-Business Rule:
-
-- If the cart subtotal is at least ₹5000, apply the highest discount percentage among its products.
-- Otherwise, no cart-level discount is applied.
-
-The discount is calculated automatically whenever products are added to the shopping cart.
-
----
-
-# 🔄 Application Workflow
+## Repository layout
 
 ```text
-User Registers
-        │
-        ▼
-User Logs In
-        │
-        ▼
-Browse Products
-        │
-        ▼
-Add Products to Cart
-        │
-        ▼
-Backend Validates Product
-        │
-        ▼
-Cart Updated
-        │
-        ▼
-Purchase Summary Generated
-        │
-        ▼
-Discount Applied
-        │
-        ▼
-Grand Total Displayed
+Online-Shopping-Application-main/
+├── Online-Shopping-App-Frontend/       # React/Vite application
+└── OnlineShoppingApplication-Backend/
+    ├── OnlineShoppingApplication/      # ASP.NET Core API
+    ├── OnlineShoppingApplication.Tests/
+    └── OnlineShoppingApplication.slnx
 ```
 
----
+## Prerequisites
 
-# ✅ Validation
+- .NET 10 SDK
+- Node.js compatible with Vite 8 (Node.js 20.19+ or 22.12+)
+- SQL Server (local or remote)
+- Entity Framework Core CLI (`dotnet-ef`) for applying migrations
 
-### Authentication
-
-- Username is required
-- Email validation
-- Password is required
-- Duplicate user validation
-
-### Product
-
-- Product Name is required
-- Description is required
-- Price must be greater than zero
-- Stock cannot be negative
-
-### Cart
-
-- Product must exist
-- Quantity must be greater than zero
-- Stock availability checked
-
----
-
-
----
-
-# 🎨 User Interface
-
-The application includes:
-
-- Responsive Navigation Bar
-- Login Page
-- Registration Page
-- Product Listing
-- Add Product Form
-- Shopping Cart
-- Purchase Summary
-- User Welcome Message
-- Mobile-Friendly Design
-
----
-
-# 🧪 Testing
-
-### Backend
-
-- Tested all APIs using Swagger
-- Verified CRUD operations
-- Tested Authentication APIs
-- Validated business logic
-- Verified HTTP status codes
-
-### Frontend
-
-- Registration
-- Login
-- Logout
-- Product Listing
-- Add Product
-- Delete Product
-- Add to Cart
-- Remove from Cart
-- Purchase Summary
-- Responsive UI
-
------ 
-
-# ⚙️ Setup Instructions
-
-## Backend
-
-### Clone Repository
+Install the EF CLI if needed:
 
 ```bash
-git clone https://github.com/your-username/OnlineShoppingApplication.git
+dotnet tool install --global dotnet-ef
 ```
 
-### Navigate to Backend
+## Configuration
+
+The API reads its SQL Server connection string from `ConnectionStrings:DefaultConnection` and JWT settings from `Jwt:Issuer`, `Jwt:Audience`, and `Jwt:Key`. Configure these values with .NET User Secrets for local development rather than committing credentials:
 
 ```bash
-cd Backend
+cd OnlineShoppingApplication-Backend/OnlineShoppingApplication
+dotnet user-secrets set "ConnectionStrings:DefaultConnection" "<your SQL Server connection string>"
+dotnet user-secrets set "Jwt:Issuer" "<your issuer>"
+dotnet user-secrets set "Jwt:Audience" "<your audience>"
+dotnet user-secrets set "Jwt:Key" "<a private signing key of at least 32 characters>"
 ```
 
-### Restore Packages
+The frontend defaults to the API's HTTPS development URL, `https://localhost:7252`. To use another API address, set `VITE_API_BASE_URL` in the frontend environment before starting Vite.
+
+## Run locally
+
+### 1. Configure the database and start the API
+
+From the repository root, configure the secrets above, then apply the EF Core migrations and run the API:
 
 ```bash
-dotnet restore
-```
-
-### Update Database
-
-```bash
+cd OnlineShoppingApplication-Backend/OnlineShoppingApplication
 dotnet ef database update
+dotnet run --launch-profile https
 ```
 
-### Run Backend
+The API uses SQL Server and the HTTPS launch profile listens at `https://localhost:7252`; Swagger is available at `https://localhost:7252/swagger` in Development. The HTTP profile is available at `http://localhost:5031`.
+
+### 2. Start the frontend
+
+In another terminal, from the repository root:
 
 ```bash
-dotnet run
-```
-
-Swagger will open automatically.
-
----
-
-## Frontend
-
-### Navigate to Frontend
-
-```bash
-cd Frontend
-```
-
-### Install Packages
-
-```bash
+cd Online-Shopping-App-Frontend
 npm install
-```
-
-### Run Application
-
-```bash
 npm run dev
 ```
 
-The application will be available at:
+Open the Vite URL shown in the terminal (by default, `http://localhost:5173`). The API's development CORS policy allows this origin.
 
-```
-http://localhost:5173
-```
-
----
-
-# 👨‍💻 Developed By
-
-**Sudhir Kadam**
-
-### Technologies
-
-- ASP.NET Core Web API
-- C#
-- Entity Framework Core
-- SQL Server
-- React.js (Vite)
-- Tailwind CSS
-- Axios
-- React Router DOM
-
-## Recent feature additions
-
-- Search products by name/description and filter by category and price.
-- Add and remove products from a per-user wishlist.
-- Place a demo order from the cart (no payment is collected); stock is checked and deducted, and orders are saved for the user's order history.
-- Product creation and deletion are restricted to users with the admin role.
-- The admin dashboard provides store totals, product editing, order status updates, and user role management.
-
-### Database update and admin setup
-
-Apply the new migration before starting the API:
+### Build the frontend
 
 ```bash
-dotnet ef database update --project OnlineShoppingApplication-Backend/OnlineShoppingApplication/OnlineShoppingApplication.csproj
+cd Online-Shopping-App-Frontend
+npm run build
 ```
 
-Newly registered accounts are regular users. To grant admin access to an existing account, run this command from the repository root after applying the migration:
+## Admin access
 
-```powershell
-dotnet run --project OnlineShoppingApplication-Backend\OnlineShoppingApplication\OnlineShoppingApplication.csproj -- --promote-admin admin@example.com
+New accounts are regular users. To promote an already registered user, run this from the repository root after configuring the backend and applying database migrations:
+
+```bash
+dotnet run --project OnlineShoppingApplication-Backend/OnlineShoppingApplication/OnlineShoppingApplication.csproj -- --promote-admin admin@example.com
 ```
 
-This only promotes an already-registered email; it cannot create accounts or change passwords. The user must log in again to receive an admin token. Keep the admin account email under your control.
+Replace the example with the registered account's email. The user must sign in again to receive a token with the updated role. Keep administrator access restricted to trusted users.
 
-### New API endpoints
+## API overview
 
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| GET | `/api/Wishlist` | Get the signed-in user's wishlist |
-| POST | `/api/Wishlist/{productId}` | Add a product to the wishlist |
-| DELETE | `/api/Wishlist/{productId}` | Remove a product from the wishlist |
-| POST | `/api/Orders/checkout/{cartId}` | Place an order and deduct stock |
-| GET | `/api/Orders` | Get the signed-in user's order history |
-| GET | `/api/Admin/dashboard` | Store totals and sales summary (admin only) |
-| GET | `/api/Admin/orders` | List all orders (admin only) |
-| PUT | `/api/Admin/orders/{orderId}/status` | Advance or cancel an order (admin only) |
-| GET | `/api/Admin/users` | List users without password data (admin only) |
-| PUT | `/api/Admin/users/{userId}/role` | Grant or revoke admin access (admin only) |
+All endpoints are under `/api`. All endpoints require JWT authentication except registration and login. Endpoints marked Admin require the Admin role.
 
-`POST /api/Products`, `PUT /api/Products/{id}`, and `DELETE /api/Products/{id}` require the Admin role.
+| Method | Endpoint | Purpose |
+|---|---|---|
+| POST | `/Auth/register` | Register a user |
+| POST | `/Auth/login` | Sign in and receive a JWT |
+| GET | `/Products` | List products |
+| GET | `/Products/{id}` | Get a product |
+| POST | `/Products` | Create a product (Admin) |
+| PUT | `/Products/{id}` | Update a product (Admin) |
+| DELETE | `/Products/{id}` | Delete a product (Admin) |
+| POST | `/Cart/create` | Get or create the current user's cart |
+| GET | `/Cart/{id}` | Get cart contents |
+| POST | `/Cart/{id}/add-item?productId={productId}&quantity={quantity}` | Add a product |
+| PUT | `/Cart/{id}/update-item?productId={productId}&quantity={quantity}` | Update a quantity |
+| DELETE | `/Cart/{id}/remove-item?productId={productId}` | Remove an item |
+| DELETE | `/Cart/{id}/clear` | Empty the cart |
+| GET | `/Cart/{id}/summary` | Get subtotal, product discounts, and total |
+| POST | `/Orders/checkout/{cartId}` | Place an order and deduct stock |
+| GET | `/Orders` | Get the current user's order history |
+| GET | `/Wishlist` | Get the current user's wishlist |
+| POST | `/Wishlist/{productId}` | Add a product to the wishlist |
+| DELETE | `/Wishlist/{productId}` | Remove a product from the wishlist |
+| GET | `/Admin/dashboard` | Get store totals (Admin) |
+| GET | `/Admin/orders` | List orders (Admin) |
+| DELETE | `/Admin/orders/{orderId}` | Delete an order (Admin) |
+| PUT | `/Admin/orders/{orderId}/status` | Update order status (Admin) |
+| GET | `/Admin/users` | List users (Admin) |
+| PUT | `/Admin/users/{userId}/role` | Change a user's admin role (Admin) |
 
----
-<<<<<<< HEAD
-=======
+Use the Swagger UI during development for request and response schemas.
 
+## Discount calculation
 
->>>>>>> e360b299b71b84890aa934d0bc8d20017619909a
+Discounts are configured per product by an administrator. The cart summary and checkout calculate each cart line's discount using that product's discount percentage and quantity, then sum the line discounts. There is no minimum cart subtotal threshold. The order stores the resulting discount amount and the product discount percentages.
+
+## Tests
+
+Run the backend tests from the repository root:
+
+```bash
+dotnet test OnlineShoppingApplication-Backend/OnlineShoppingApplication.Tests/OnlineShoppingApplication.Tests.csproj
+```
