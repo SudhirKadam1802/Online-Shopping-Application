@@ -191,7 +191,7 @@ const Login = () => {
               className="login-transition-logo"
             />
             <span className="login-transition-name">
-              Online<span> Shopping</span>
+              Cart<span> Avenue</span>
             </span>
           </div>
         </div>
