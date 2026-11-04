@@ -19,3 +19,78 @@ body {
 * {
   box-sizing: border-box;
 }
+
+.login-transition-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background:
+    radial-gradient(ellipse at center, rgba(51, 65, 85, 0.72), transparent 58%),
+    linear-gradient(135deg, #171717, #242424 55%, #171717);
+  animation: login-overlay-appear 300ms ease-out both;
+}
+
+.login-transition-brand {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.5rem;
+  animation: login-brand-pop 600ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+.login-transition-logo {
+  width: clamp(4rem, 12vw, 6rem);
+  height: clamp(4rem, 12vw, 6rem);
+  object-fit: contain;
+  animation: login-logo-rotate 2s linear 1;
+}
+
+.login-transition-name {
+  color: #fff;
+  font-size: clamp(1.75rem, 6vw, 3rem);
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  white-space: nowrap;
+}
+
+.login-transition-name span {
+  color: #fb923c;
+}
+
+@keyframes login-overlay-appear {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes login-brand-pop {
+  from {
+    opacity: 0;
+    transform: scale(0.55) translateY(1rem);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes login-logo-rotate {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .login-transition-overlay,
+  .login-transition-brand,
+  .login-transition-logo {
+    animation: none;
+  }
+}

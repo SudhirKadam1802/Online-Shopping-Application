@@ -1,8 +1,11 @@
-import { Link } from "react-router-dom";
+
+import { Link, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 
 const Navbar = ({ cartCount }) => {
+  const { pathname } = useLocation();
   const [user, setUser] = useState(null);
+  const isLoginPage = pathname === "/login";
 
   useEffect(() => {
     const loadUser = () => {
@@ -45,9 +48,11 @@ const Navbar = ({ cartCount }) => {
           to="/"
           className="group flex items-center gap-3"
         >
-          <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-orange-400 to-orange-600 text-2xl shadow-lg shadow-orange-500/20 transition-transform duration-300 group-hover:scale-110">
-            🛍️
-          </span>
+          <img
+            src="/shop-logo-white-transparent.png"
+            alt="Online Shopping Logo"
+            className="h-12 w-12 object-contain transition-transform duration-300 group-hover:scale-110"
+          />
 
           <span className="text-2xl font-extrabold tracking-tight text-white">
             Online
@@ -58,11 +63,13 @@ const Navbar = ({ cartCount }) => {
         {/* Navigation */}
         <div className="flex items-center gap-3">
 
-          <Link to="/" className={navLink}>
-            Home
-          </Link>
+          {!isLoginPage && (
+            <Link to="/" className={navLink}>
+              Home
+            </Link>
+          )}
 
-          {!user?.isAdmin && (
+          {!isLoginPage && !user?.isAdmin && (
             <Link
               to="/cart"
               className="flex items-center gap-2 rounded-xl border border-orange-400/20 bg-orange-500/10 px-4 py-2.5 text-sm font-semibold text-orange-300 transition-all duration-300 hover:border-orange-400/50 hover:bg-orange-500/20"
@@ -79,18 +86,18 @@ const Navbar = ({ cartCount }) => {
             <>
               {user.isAdmin && (
                 <Link to="/admin" className={navLink}>
-                  ⚙️ Admin
+                  Admin
                 </Link>
               )}
 
               {!user.isAdmin && (
                 <Link to="/wishlist" className={navLink}>
-                  ❤️ Wishlist
+                   Wishlist
                 </Link>
               )}
 
               <Link to="/orders" className={navLink}>
-                📦 Orders
+                 Orders
               </Link>
             </>
           )}
@@ -114,7 +121,7 @@ const Navbar = ({ cartCount }) => {
           ) : (
             <>
               <div className="rounded-xl border border-gray-600 bg-white/5 px-4 py-2.5 text-sm font-medium text-gray-200">
-                👋 Welcome, <span className="font-bold text-orange-400">{user.name}</span>
+                 Welcome, <span className="font-bold text-orange-400">{user.name}</span>
               </div>
 
               <button

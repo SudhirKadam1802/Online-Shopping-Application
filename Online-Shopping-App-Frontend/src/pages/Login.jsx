@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { loginUser } from "../api";
@@ -15,6 +15,17 @@ const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [transitionDestination, setTransitionDestination] = useState(null);
+
+  useEffect(() => {
+    if (!transitionDestination) return undefined;
+
+    const timeoutId = window.setTimeout(() => {
+      navigate(transitionDestination, { replace: true });
+    }, 2000);
+
+    return () => window.clearTimeout(timeoutId);
+  }, [navigate, transitionDestination]);
 
   const handleChange = (e) => {
     setFormData({
@@ -41,9 +52,9 @@ const Login = () => {
       window.dispatchEvent(new Event("auth-changed"));
 
       const returnTo = location.state?.from?.pathname;
-      navigate(response.data.user.isAdmin ? "/admin" : returnTo || "/", {
-        replace: true,
-      });
+      setTransitionDestination(
+        response.data.user.isAdmin ? "/admin" : returnTo || "/"
+      );
     } catch (err) {
       setError(
         err.response?.data?.message ||
@@ -55,15 +66,19 @@ const Login = () => {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-slate-100 via-violet-50 to-purple-100 px-4 py-8">
+    <div className="relative left-1/2 -my-8 flex min-h-[calc(100vh-5rem)] w-screen -translate-x-1/2 items-center justify-center bg-gradient-to-br from-slate-100 via-violet-50 to-purple-100 px-4 py-8">
 
       <div className="w-full max-w-md rounded-2xl border border-white/70 bg-white/95 p-6 shadow-2xl backdrop-blur-sm">
 
         {/* Logo */}
         <div className="mb-5 text-center">
 
-          <div className="mx-auto mb-3 flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-r from-violet-500 to-fuchsia-500 text-3xl text-white shadow-lg">
-            🛍️
+          <div className="mx-auto mb-3 flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-orange-400 to-orange-600 shadow-lg shadow-orange-500/20">
+            <img
+              src="/shop-logo-white-transparent.png"
+              alt="Online Shopping logo"
+              className="h-10 w-10 object-contain"
+            />
           </div>
 
           <h2 className="text-2xl font-bold text-slate-800">
@@ -136,10 +151,10 @@ const Login = () => {
           {/* Login Button */}
           <button
             type="submit"
-            disabled={loading}
-            className="mt-2 w-full rounded-lg bg-gradient-to-r from-violet-600 to-fuchsia-600 py-2.5 font-semibold text-white shadow-lg transition-all duration-300 hover:scale-[1.02] hover:shadow-xl disabled:cursor-not-allowed disabled:opacity-70"
+            disabled={loading || Boolean(transitionDestination)}
+            className="mt-2 w-full rounded-lg bg-orange-500 py-2.5 font-bold text-black shadow-lg shadow-orange-500/20 transition-all duration-300 hover:scale-[1.02] hover:bg-orange-400 hover:shadow-orange-500/40 disabled:cursor-not-allowed disabled:opacity-70"
           >
-            {loading ? "Logging in..." : "Login"}
+            {loading ? "Logging in..." : transitionDestination ? "Welcome!" : "Login"}
           </button>
 
         </form>
@@ -161,6 +176,26 @@ const Login = () => {
         </div>
 
       </div>
+
+      {transitionDestination && (
+        <div
+          className="login-transition-overlay"
+          role="status"
+          aria-live="polite"
+          aria-label="Login successful. Opening your store."
+        >
+          <div className="login-transition-brand">
+            <img
+              src="/shop-logo-white-transparent.png"
+              alt=""
+              className="login-transition-logo"
+            />
+            <span className="login-transition-name">
+              Online<span> Shopping</span>
+            </span>
+          </div>
+        </div>
+      )}
 
     </div>
   );
