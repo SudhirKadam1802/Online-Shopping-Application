@@ -8,7 +8,7 @@ namespace OnlineShoppingApplication.Controllers
 {
     /// <summary>
     /// Controller for shopping cart operations.
-    /// Discount is applied automatically when subtotal >= 5000.
+    /// Product discounts are applied to each discounted cart item.
     /// </summary>
     [ApiController]
 
@@ -17,8 +17,6 @@ namespace OnlineShoppingApplication.Controllers
     public class CartController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
-        private const decimal DISCOUNT_THRESHOLD = 5000;
-
         public CartController(ApplicationDbContext context)
         {
             _context = context;
@@ -290,7 +288,7 @@ namespace OnlineShoppingApplication.Controllers
 
         /// <summary>
         /// Get the purchase summary for a cart with itemised breakdown, subtotal, discount, and grand total.
-        /// Discount is applied when subtotal >= 5000.
+        /// Product discounts are applied individually to eligible cart items.
         /// </summary>
         /// <param name="id">Cart ID</param>
         /// <returns>Purchase summary</returns>
@@ -340,15 +338,16 @@ namespace OnlineShoppingApplication.Controllers
 
                 summary.Subtotal = subtotal;
 
-                // Apply discount if subtotal >= 5000
-                // Use the highest discount from cart items
-                if (subtotal >= DISCOUNT_THRESHOLD && cart.CartItems.Any())
+                var discountedItems = cart.CartItems
+                    .Where(item => item.Product != null && item.Product.Discount > 0)
+                    .ToList();
+                if (discountedItems.Count > 0)
                 {
-                    summary.DiscountPercentage = cart.CartItems
-                        .Where(ci => ci.Product != null)
-                        .Max(ci => ci.Product!.Discount);
-
-                    summary.DiscountAmount = Math.Round(subtotal * summary.DiscountPercentage / 100, 2);
+                    summary.DiscountPercentage = discountedItems.Max(item => item.Product!.Discount);
+                    summary.DiscountAmount = Math.Round(
+                        discountedItems.Sum(item =>
+                            item.Quantity * item.Price * item.Product!.Discount / 100m),
+                        2);
                 }
 
                 summary.GrandTotal = subtotal - summary.DiscountAmount;

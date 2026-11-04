@@ -13,7 +13,6 @@ namespace OnlineShoppingApplication.Controllers
     [Authorize]
     public class OrdersController : ControllerBase
     {
-        private const decimal DiscountThreshold = 5000;
         private readonly ApplicationDbContext _context;
 
         public OrdersController(ApplicationDbContext context)
@@ -56,10 +55,10 @@ namespace OnlineShoppingApplication.Controllers
                 }
 
                 var subtotal = cart.CartItems.Sum(item => item.Quantity * item.Price);
-                var discountPercentage = subtotal >= DiscountThreshold
-                    ? cart.CartItems.Max(item => item.Product!.Discount)
-                    : 0;
-                var discountAmount = Math.Round(subtotal * discountPercentage / 100m, 2);
+                var discountAmount = Math.Round(
+                    cart.CartItems.Sum(item =>
+                        item.Quantity * item.Price * item.Product!.Discount / 100m),
+                    2);
 
                 var order = new Order
                 {

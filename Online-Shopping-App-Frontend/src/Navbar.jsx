@@ -1,6 +1,7 @@
 
 import { Link, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { ShoppingCart } from "lucide-react";
 
 const Navbar = ({ cartCount }) => {
   const { pathname } = useLocation();
@@ -55,8 +56,8 @@ const Navbar = ({ cartCount }) => {
           />
 
           <span className="text-2xl font-extrabold tracking-tight text-white">
-            Online
-            <span className="text-orange-400"> Shopping</span>
+            Cart
+            <span className="text-orange-400"> Avenue</span>
           </span>
         </Link>
 
@@ -74,11 +75,19 @@ const Navbar = ({ cartCount }) => {
               to="/cart"
               className="flex items-center gap-2 rounded-xl border border-orange-400/20 bg-orange-500/10 px-4 py-2.5 text-sm font-semibold text-orange-300 transition-all duration-300 hover:border-orange-400/50 hover:bg-orange-500/20"
             >
-              🛒 Cart
-
-              <span className="flex h-6 min-w-6 items-center justify-center rounded-full bg-orange-500 px-1.5 text-xs font-bold text-black">
-                {cartCount}
+              <span className="relative inline-flex">
+                <ShoppingCart size={18} aria-hidden="true" />
+                {cartCount > 0 && (
+                  <span
+                    key={cartCount}
+                    aria-label={`${cartCount} items in cart`}
+                    className="absolute -right-2 -top-2 flex h-4 min-w-4 animate-[cart-count-pop_180ms_ease-out] items-center justify-center rounded-full border border-[#242424] bg-violet-600 px-1 text-[10px] font-bold leading-none text-white"
+                  >
+                    {cartCount}
+                  </span>
+                )}
               </span>
+              Cart
             </Link>
           )}
 
@@ -134,6 +143,7 @@ const Navbar = ({ cartCount }) => {
           )}
 
         </div>
+        
       </div>
     </nav>
   );

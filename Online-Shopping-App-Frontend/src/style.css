@@ -20,6 +20,15 @@ body {
   box-sizing: border-box;
 }
 
+@keyframes cart-count-pop {
+  from {
+    transform: scale(0.7);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+
 .login-transition-overlay {
   position: fixed;
   inset: 0;

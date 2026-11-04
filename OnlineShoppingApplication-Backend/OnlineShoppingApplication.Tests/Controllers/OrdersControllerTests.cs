@@ -69,6 +69,37 @@ namespace OnlineShoppingApplication.Tests.Controllers
         }
 
         [Fact]
+        public async Task Checkout_AppliesEachProductDiscountIndependentlyBelow5000()
+        {
+            await using var context = await CreateDbContext();
+            var cart = new Cart { UserId = 7 };
+            context.Carts.Add(cart);
+            context.CartItems.AddRange(
+                new CartItem
+                {
+                    Cart = cart,
+                    ProductId = 2,
+                    Quantity = 1,
+                    Price = 1500
+                },
+                new CartItem
+                {
+                    Cart = cart,
+                    ProductId = 3,
+                    Quantity = 1,
+                    Price = 800
+                });
+            await context.SaveChangesAsync();
+
+            var result = await CreateController(context, 7).Checkout(cart.Id);
+
+            var order = Assert.IsType<Order>(Assert.IsType<OkObjectResult>(result.Result).Value);
+            Assert.Equal(2300, order.Subtotal);
+            Assert.Equal(75, order.DiscountAmount);
+            Assert.Equal(2225, order.GrandTotal);
+        }
+
+        [Fact]
         public async Task Checkout_CannotCheckoutAnotherUsersCart()
         {
             await using var context = await CreateDbContext();
