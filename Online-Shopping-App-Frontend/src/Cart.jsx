@@ -52,10 +52,15 @@ const Cart = ({ cartId, onCartChanged }) => {
       console.error(err);
     }
   };
-
+<>
   <div>
     hii
   </div>
+
+  <div>
+    welcome
+  </div>
+</>
 
   const handleRemove = async (productId) => {
     try {
