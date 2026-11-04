@@ -161,4 +161,3 @@ C:\Users\SUDHIR KADAM\Desktop\Online-Shopping-Application-main\OnlineShoppingApp
 C:\Users\SUDHIR KADAM\Desktop\Online-Shopping-Application-main\OnlineShoppingApplication-Backend\OnlineShoppingApplication\obj\Debug\net10.0\OnlineShoppingApplication.pdb
 C:\Users\SUDHIR KADAM\Desktop\Online-Shopping-Application-main\OnlineShoppingApplication-Backend\OnlineShoppingApplication\obj\Debug\net10.0\OnlineShoppingApplication.genruntimeconfig.cache
 C:\Users\SUDHIR KADAM\Desktop\Online-Shopping-Application-main\OnlineShoppingApplication-Backend\OnlineShoppingApplication\obj\Debug\net10.0\ref\OnlineShoppingApplication.dll
-C:\Users\SUDHIR KADAM\Desktop\Online-Shopping-Application-main\OnlineShoppingApplication-Backend\OnlineShoppingApplication\obj\Debug\net10.0\staticwebassets.upToDateCheck.txt
