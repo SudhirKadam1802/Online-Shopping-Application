@@ -47,12 +47,16 @@ const Signup = () => {
   };
 
   return (
-     <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-slate-100 via-violet-50 to-purple-100 px-4 py-8">
+     <div className="relative left-1/2 -my-8 flex min-h-[calc(100vh-5rem)] w-screen -translate-x-1/2 items-center justify-center bg-gradient-to-br from-slate-100 via-violet-50 to-purple-100 px-4 py-8">
       <div className="w-full max-w-md rounded-2xl border border-white/70 bg-white/95 p-6 shadow-2xl backdrop-blur-sm">
 
         <div className="mb-5 text-center">
-          <div className="mx-auto mb-3 flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-r from-violet-500 to-fuchsia-500 text-3xl text-white shadow-lg">
-            🛍️
+          <div className="mx-auto mb-3 flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-orange-400 to-orange-600 shadow-lg shadow-orange-500/20">
+            <img
+              src="/shop-logo-white-transparent.png"
+              alt="Online Shopping logo"
+              className="h-10 w-10 object-contain"
+            />
           </div>
 
           <h2 className="text-2xl font-bold text-slate-800">
@@ -90,7 +94,7 @@ const Signup = () => {
               value={formData.name}
               onChange={handleChange}
               required
-              className="w-full rounded-lg border border-slate-300 px-4 py-2.5 focus:border-violet-500 focus:ring-2 focus:ring-violet-200 outline-none"
+              className="w-full rounded-lg border border-slate-300 bg-white px-4 py-2.5 text-slate-700 outline-none transition-all duration-300 focus:border-violet-500 focus:ring-2 focus:ring-violet-200"
             />
           </div>
 
@@ -106,7 +110,7 @@ const Signup = () => {
               value={formData.email}
               onChange={handleChange}
               required
-              className="w-full rounded-lg border border-slate-300 px-4 py-2.5 focus:border-violet-500 focus:ring-2 focus:ring-violet-200 outline-none"
+              className="w-full rounded-lg border border-slate-300 bg-white px-4 py-2.5 text-slate-700 outline-none transition-all duration-300 focus:border-violet-500 focus:ring-2 focus:ring-violet-200"
             />
           </div>
 
@@ -123,13 +127,13 @@ const Signup = () => {
                 value={formData.password}
                 onChange={handleChange}
                 required
-                className="w-full rounded-lg border border-slate-300 px-4 py-2.5 pr-12 focus:border-violet-500 focus:ring-2 focus:ring-violet-200 outline-none"
+                className="w-full rounded-lg border border-slate-300 bg-white px-4 py-2.5 pr-12 text-slate-700 outline-none transition-all duration-300 focus:border-violet-500 focus:ring-2 focus:ring-violet-200"
               />
 
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute inset-y-0 right-3 flex items-center text-gray-500 hover:text-violet-600"
+                className="absolute inset-y-0 right-4 flex items-center text-gray-500 hover:text-violet-600"
               >
                 {showPassword ? <FaEyeSlash /> : <FaEye />}
               </button>
@@ -139,7 +143,7 @@ const Signup = () => {
           <button
             type="submit"
             disabled={loading}
-            className="mt-2 w-full rounded-lg bg-gradient-to-r from-violet-600 to-fuchsia-600 py-2.5 font-semibold text-white shadow-lg hover:scale-[1.02] transition"
+            className="mt-2 w-full rounded-lg bg-orange-500 py-2.5 font-bold text-black shadow-lg shadow-orange-500/20 transition-all duration-300 hover:scale-[1.02] hover:bg-orange-400 hover:shadow-orange-500/40 disabled:cursor-not-allowed disabled:opacity-70"
           >
             {loading ? "Creating Account..." : "Create Account"}
           </button>
@@ -152,7 +156,7 @@ const Signup = () => {
 
           <Link
             to="/login"
-            className="mt-2 inline-block font-semibold text-violet-600 hover:text-fuchsia-600 hover:underline"
+            className="mt-2 inline-block font-semibold text-violet-600 transition hover:text-fuchsia-600 hover:underline"
           >
             Login Here →
           </Link>
