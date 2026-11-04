@@ -6,7 +6,7 @@ import { ShoppingCart } from "lucide-react";
 const Navbar = ({ cartCount }) => {
   const { pathname } = useLocation();
   const [user, setUser] = useState(null);
-  const isLoginPage = pathname === "/login";
+  const isAuthPage = pathname === "/login" || pathname === "/signup";
 
   useEffect(() => {
     const loadUser = () => {
@@ -64,13 +64,13 @@ const Navbar = ({ cartCount }) => {
         {/* Navigation */}
         <div className="flex items-center gap-3">
 
-          {!isLoginPage && (
+          {!isAuthPage && (
             <Link to="/" className={navLink}>
               Home
             </Link>
           )}
 
-          {!isLoginPage && !user?.isAdmin && (
+          {!isAuthPage && !user?.isAdmin && (
             <Link
               to="/cart"
               className="flex items-center gap-2 rounded-xl border border-orange-400/20 bg-orange-500/10 px-4 py-2.5 text-sm font-semibold text-orange-300 transition-all duration-300 hover:border-orange-400/50 hover:bg-orange-500/20"
