@@ -2,7 +2,7 @@
 {
     /// <summary>
     /// Represents the purchase summary with itemised breakdown, subtotal, discount, and grand total.
-    /// Discount is applied when subtotal is >= 5000.
+    /// Product discounts are applied individually to eligible cart items.
     /// </summary>
     public class PurchaseSummary
     {
