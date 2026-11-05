@@ -15,11 +15,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("OnlineShoppingApplication")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-<<<<<<< HEAD
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+d7c7aaed5629b64a3087822bd592bdbffa9f0716")]
-=======
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+22274df5b43777c4e48a4cc4428ec87f5454226c")]
->>>>>>> origin/main
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+cd4ccde1b4548d718cf7438158eea08ccfd8fb36")]
 [assembly: System.Reflection.AssemblyProductAttribute("OnlineShoppingApplication")]
 [assembly: System.Reflection.AssemblyTitleAttribute("OnlineShoppingApplication")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
