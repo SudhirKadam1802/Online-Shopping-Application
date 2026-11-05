@@ -24,6 +24,7 @@ namespace OnlineShoppingApplication.Controllers
         /// Get all products available in the store.
         /// </summary>
         /// <returns>List of products with details</returns>
+        [AllowAnonymous]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Product>>> GetProducts()
         {
@@ -97,6 +98,7 @@ namespace OnlineShoppingApplication.Controllers
         /// </summary>
         /// <param name="id">Product ID</param>
         /// <returns>Product details</returns>
+        [AllowAnonymous]
         [HttpGet("{id}")]
         public async Task<ActionResult<Product>> GetProduct(int id)
         {
