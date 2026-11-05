@@ -1,6 +1,6 @@
 # Cart Avenue
 
-A full-stack online shopping application built with React, ASP.NET Core Web API, Entity Framework Core, and SQL Server. Customers can browse products, manage a cart and wishlist, and place demo orders. Administrators can manage products, orders, and user roles.
+A full-stack online shopping application built with React, ASP.NET Core Web API, Entity Framework Core, and PostgreSQL. Customers can browse products, manage a cart and wishlist, and place demo orders. Administrators can manage products, orders, and user roles.
 
 ## Features
 
@@ -18,7 +18,7 @@ A full-stack online shopping application built with React, ASP.NET Core Web API,
 
 - **Frontend:** React 18, Vite, Tailwind CSS, Axios, React Router
 - **Backend:** ASP.NET Core Web API on .NET 10, Entity Framework Core 10, JWT authentication
-- **Database:** SQL Server
+- **Database:** PostgreSQL (Npgsql)
 - **Tests:** xUnit and EF Core InMemory
 
 ## Repository layout
@@ -36,7 +36,7 @@ Online-Shopping-Application-main/
 
 - .NET 10 SDK
 - Node.js compatible with Vite 8 (Node.js 20.19+ or 22.12+)
-- SQL Server (local or remote)
+- PostgreSQL (local or Neon)
 - Entity Framework Core CLI (`dotnet-ef`) for applying migrations
 
 Install the EF CLI if needed:
@@ -47,15 +47,17 @@ dotnet tool install --global dotnet-ef
 
 ## Configuration
 
-The API reads its SQL Server connection string from `ConnectionStrings:DefaultConnection` and JWT settings from `Jwt:Issuer`, `Jwt:Audience`, and `Jwt:Key`. Configure these values with .NET User Secrets for local development rather than committing credentials:
+The API reads its PostgreSQL connection string from `ConnectionStrings:DefaultConnection` and JWT settings from `Jwt:Issuer`, `Jwt:Audience`, and `Jwt:Key`. Configure these values with .NET User Secrets for local development rather than committing credentials:
 
 ```bash
 cd OnlineShoppingApplication-Backend/OnlineShoppingApplication
-dotnet user-secrets set "ConnectionStrings:DefaultConnection" "<your SQL Server connection string>"
+dotnet user-secrets set "ConnectionStrings:DefaultConnection" "<your PostgreSQL connection string>"
 dotnet user-secrets set "Jwt:Issuer" "<your issuer>"
 dotnet user-secrets set "Jwt:Audience" "<your audience>"
 dotnet user-secrets set "Jwt:Key" "<a private signing key of at least 32 characters>"
 ```
+
+For deployment, configure `Cors__AllowedOrigins__0` on the API host with the frontend's exact HTTPS origin (for example, `https://your-frontend.onrender.com`). The local Vite origins remain enabled for development.
 
 The frontend defaults to the API's HTTPS development URL, `https://localhost:7252`. To use another API address, set `VITE_API_BASE_URL` in the frontend environment before starting Vite.
 
@@ -71,7 +73,7 @@ dotnet ef database update
 dotnet run --launch-profile https
 ```
 
-The API uses SQL Server and the HTTPS launch profile listens at `https://localhost:7252`; Swagger is available at `https://localhost:7252/swagger` in Development. The HTTP profile is available at `http://localhost:5031`.
+The API uses PostgreSQL and the HTTPS launch profile listens at `https://localhost:7252`; Swagger is available at `https://localhost:7252/swagger` in Development. The HTTP profile is available at `http://localhost:5031`.
 
 ### 2. Start the frontend
 
@@ -104,7 +106,7 @@ Replace the example with the registered account's email. The user must sign in a
 
 ## API overview
 
-All endpoints are under `/api`. All endpoints require JWT authentication except registration and login. Endpoints marked Admin require the Admin role.
+Most endpoints require JWT authentication. Registration, login, and public product GET endpoints do not require authentication. Endpoints marked Admin require the Admin role.
 
 | Method | Endpoint | Purpose |
 |---|---|---|
