@@ -91,7 +91,7 @@ const Navbar = ({ cartCount }) => {
             </Link>
           )}
 
-          {user && (
+          {user && !isAuthPage && (
             <>
               {user.isAdmin && (
                 <Link to="/admin" className={navLink}>
@@ -111,7 +111,7 @@ const Navbar = ({ cartCount }) => {
             </>
           )}
 
-          {!user ? (
+          {!user || isAuthPage ? (
             <>
               <Link
                 to="/login"
