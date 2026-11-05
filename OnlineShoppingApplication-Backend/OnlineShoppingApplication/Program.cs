@@ -25,7 +25,12 @@ var configuredFrontendOrigins = builder.Configuration
     .GetSection("Cors:AllowedOrigins")
     .Get<string[]>() ?? Array.Empty<string>();
 var allowedFrontendOrigins = configuredFrontendOrigins
-    .Concat(new[] { "http://localhost:5173", "http://localhost:5174" })
+    .Concat(new[]
+    {
+        "http://localhost:5173",
+        "http://localhost:5174",
+        "https://online-shopping-frontend-eesx.onrender.com"
+    })
     .Distinct(StringComparer.OrdinalIgnoreCase)
     .ToArray();
 
