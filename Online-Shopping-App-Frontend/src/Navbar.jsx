@@ -142,9 +142,9 @@ const Navbar = ({ cartCount }) => {
             </>
           )}
 
+       </div>
+       
         </div>
-        
-      </div>
     </nav>
   );
 };
